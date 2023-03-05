@@ -1,6 +1,9 @@
-const express = require("express");
-const path = require("path");
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+
+var usersRouter = require('./routes/users.route')
+
 const app = express();
 const port = 3000;
 
@@ -14,10 +17,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"))
 });
 
-app.post("/signup", (req, res) => {
-	console.log(req.body)
-	res.send("Got form data")
-})
+app.use("/", usersRouter)
+
+
 
 // Server Listen
 app.listen(port, () => {
