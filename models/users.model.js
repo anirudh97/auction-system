@@ -11,24 +11,42 @@ const User = function(user) {
 User.create = (newUser, result) => {
 	console.log("Model: User: create: Invoked !");
 
-	bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
-		if (hashErr) {
-			console.log("Model: User: create: Error in hashing password !: ", hashErr)
-			result(hashErr, null)
+	sqlQueryCheck = "SELECT * FROM users WHERE email = " + sql.escape(newUser.email)
+	sql.query(sqlQueryCheck, (err, res) => {
+		if(err) {
+			console.log("Model: User: create check: Error !: ", err)
+			result(err);
 			return;
 		};
 
-		sqlQuery = "INSERT INTO users(email, password, type) VALUES(?,?,?)";
-		sql.query(sqlQuery, [newUser.email, hash, newUser.type], (err, res) => {
-			if (err) {
-				console.log("Model: User: create: Error !: ", err)
-				result(err, null);
-				return;
-			};
-			console.log("Model: User: create: User Added: ", {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type});
-			result(null, {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type})
-		});
+		if (res.length > 0){
+
+			console.log("Model: User: create check: User already exists. Please login!")
+			result({"message": "User already exists. Please login!"});
+			return;
+
+		} else{
+			bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
+				if (hashErr) {
+					console.log("Model: User: create: Error in hashing password !: ", hashErr)
+					result(hashErr, null)
+					return;
+				};
+
+				sqlQuery = "INSERT INTO users(email, password, type) VALUES(?,?,?)";
+				sql.query(sqlQuery, [newUser.email, hash, newUser.type], (err, res) => {
+					if (err) {
+						console.log("Model: User: create: Error !: ", err)
+						result(err, null);
+						return;
+					};
+					console.log("Model: User: create: User Added: ", {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type});
+					result(null, {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type})
+				});
+			});
+		};
 	});
+
 };
 
 
@@ -39,26 +57,27 @@ User.signin = (newUser, result) => {
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
 				console.log("Model: User: signin: Error !: ", err)
-				result(err, null);
+				result(err);
 				return;
 		};
+
 		if (res.length > 0){
 			bcrypt.compare(newUser.password, res[0].password, (hashErr, res) => {
 				if (res == true){
 					console.log("Model: User: sigin: retreived login details. : ", res)
-					result(null, {"msg": "YOLO!"})
+					result(null, {"message": "YOLO!"})
 				}else{
-					console.log("Model: User: signin: Incorrect password!: ", err)
-					result(new Error("Incorrect password"), null);
+					console.log("Model: User: signin: Incorrect password!")
+					result({"message": "Incorrect password!"});
 					return;
 				}
 
 			});
 		} else{
-			console.log("Model: User: signin: Error user does not exist. Please signup!: ", err)
-			result("Error user does not exist. Please signup!", null);
+			console.log("Model: User: signin: Error user does not exist. Please signup!")
+			result({"message": "Error user does not exist. Please signup!"});
 			return;
-		}
+		};
 	});
 };
 module.exports = User;
