@@ -15,7 +15,7 @@ User.create = (newUser, result) => {
 	sql.query(sqlQueryCheck, (err, res) => {
 		if(err) {
 			console.log("Model: User: create check: Error !: ", err)
-			result(err);
+			result({"message": err});
 			return;
 		};
 
@@ -29,7 +29,7 @@ User.create = (newUser, result) => {
 			bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
 				if (hashErr) {
 					console.log("Model: User: create: Error in hashing password !: ", hashErr)
-					result(hashErr, null)
+					result({"message": hashErr}, null)
 					return;
 				};
 
@@ -37,7 +37,7 @@ User.create = (newUser, result) => {
 				sql.query(sqlQuery, [newUser.email, hash, newUser.type], (err, res) => {
 					if (err) {
 						console.log("Model: User: create: Error !: ", err)
-						result(err, null);
+						result({"message": err}, null);
 						return;
 					};
 					console.log("Model: User: create: User Added: ", {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type});
@@ -57,7 +57,7 @@ User.signin = (newUser, result) => {
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
 				console.log("Model: User: signin: Error !: ", err)
-				result(err);
+				result({"message": err});
 				return;
 		};
 

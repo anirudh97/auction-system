@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 var usersRouter = require('./routes/users.route')
+var itemsRouter = require('./routes/items.route')
 
 const app = express();
 const port = 3000;
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", usersRouter)
+app.use("/items", itemsRouter)
 
 
 
