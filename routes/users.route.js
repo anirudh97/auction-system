@@ -7,8 +7,7 @@ router.post('/signup', users.create)
 router.post('/signin', users.signin)
 
 router.get('/signup', (req, res) => {
-	console.log("GET!!!!!!")
-	res.sendFile(path.join(__dirname, "../views/signup.html"))
+	res.render('pages/signup');
 });
 
 module.exports = router;

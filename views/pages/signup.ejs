@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head'); %>
+        <script>
+            const validateEmail = (emailValue) => {
+                return emailValue.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+            }
+            const createAlert = (message, type) => {
+                const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+                const wrapper = document.createElement('div')
+                wrapper.innerHTML = [
+                    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                    `   <div>${message}</div>`,
+                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                    '</div>'
+                ].join('')
+
+                alertPlaceholder.append(wrapper)
+            };
+            const validateSignup = () => {
+                const pwd = document.getElementById("floatingPassword");
+                const pwdRetype = document.getElementById("floatingPasswordRetype");
+                const emailId = document.getElementById("floatingEmail");
+                
+                if (!emailId.value || !pwd.value || !pwdRetype.value){
+                    createAlert("Fields cannot be empty!", "danger")
+                }
+                else if (!validateEmail(emailId.value)) {
+                    createAlert("Invalid Email type.", "danger")
+                }
+                else if(pwd.value != pwdRetype.value){
+                    createAlert("Both the passwords are not the same.", "danger")
+                }
+                else{
+                    document.getElementById('signupForm').submit()
+                }
+            };
+        </script>
+</head>
+
+<body>
+    <div class="d-flex">
+        <img src="/logo.png" width="175" height="150">
+    </div>
+    <div class="d-flex justify-content-end">
+        <div class="fixed-right" id="liveAlertPlaceholder"></div>
+    </div>
+    <% if( locals.data ) { %>
+        <script>
+            createAlert("<%= data.message %>", "<%= data.alertType %>")
+        </script>
+    <% } %>
+    <div class="d-flex justify-content-center">
+        <p class="fs-3">Create an account</p>
+    </div>
+    <div class="d-flex justify-content-lg-center">
+        <div class="w-25">
+            <form action="/signup" method="POST" id="signupForm">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingEmail" placeholder="test@example.com"
+                        name="email" required>
+                    <label for="floatingEmail">Email Address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                        name="password" required>
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPasswordRetype"
+                        placeholder="Retype Password" name="retypePassword" required>
+                    <label for="floatingPassword">Retype Password</label>
+                </div>
+                <div class="d-flex justify-content-lg-center">
+                    <button type="button" class="btn btn-primary w-100" onclick="validateSignup()">Create
+                        Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="d-flex justify-content-lg-center pt-5">
+        <form action="/" method="GET" id="signinForm">
+            <p class="fs-6">Already have an Account?<a href="javascript:;"
+                    onclick="document.getElementById('signinForm').submit();">Sign
+                    In</a></p>
+        </form>
+    </div>
+</body>
+
+<footer>
+    <%- include('../partials/footer'); %>
+</footer>
+
+</html>
