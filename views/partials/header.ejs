@@ -1,0 +1,56 @@
+<style>
+    div:hover #logo {
+        cursor: pointer;
+    }
+
+    div:hover #createAuction {
+        cursor: pointer;
+    }
+</style>
+<div class="navbar bg-primary">
+    <div class="d-flex justify-content-between">
+        <div class="mt-0 ms-3">
+            <form action="/" method="GET" id="homeForm">
+                <div class="" id="logo" onclick="document.getElementById('homeForm').submit();">
+                    <i class="fa-solid fa-cart-shopping fa-2x" style="color: #fff;"></i>
+                    <span style="color: #fff;" class="fs-3">BuyMe</span>
+                </div>
+            </form>
+        </div>
+
+        <div class="fs-6 mt-2 mx-5">
+            <form action="/" method="GET" id="createAuctionForm">
+                <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <a class="nav-link" style="color: #fff;">Create New Auction</a>
+                </div>
+            </form>
+        </div>
+        <div class="fs-6 mt-2 mx-1">
+            <form action="/" method="GET" id="createAuctionForm">
+                <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <a class="nav-link" style="color: #fff;">My Auctions</a>
+                </div>
+            </form>
+        </div>
+        <div class="fs-6 mt-2 mx-5">
+            <form action="/" method="GET" id="createAuctionForm">
+                <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <a class="nav-link" style="color: #fff;">My Watchlist</a>
+                </div>
+            </form>
+        </div>
+        <div class="fs-6 mt-2 mx-2">
+            <form action="/" method="GET" id="createAuctionForm">
+                <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <a class="nav-link" style="color: #fff;">My Help Requests</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="position-absolute end-0 mt-0 mx-2">
+            <form action="/" method="GET" id="signOutForm">
+                <button type="submit" class="btn btn-warning">Sign Out</button>
+            </form>
+        </div>
+    </div>
+</div>
