@@ -3,29 +3,28 @@ const User = require('../models/users.model.js')
 exports.create = (req, res) => {
 	if (!req.body) {
 		res.render('pages/signup', { "status": 400, "data": { "message": "Values cannot be empty!", "alertType": "danger" } });
-	};
-
-	if (req.body.email.includes("admin") || req.body.email.includes("buyme.com")) {
+	}
+	else if (req.body.email.includes("admin") || req.body.email.includes("buyme.com")) {
 		res.render('pages/signup', { "status": 400, "data": { "message": "Restricted email. Please use another email id", "alertType": "danger" } });
+	}
+	else {
+		const user = new User({
+			password: req.body.password,
+			email: req.body.email,
+			type: "user"
+		});
+
+		User.create(user, (err, data) => {
+			if (err) {
+				res.render('pages/signup', { "status": 500, "data": { "message": err.message, "alertType": "danger" } })
+			}
+
+			else {
+				console.log("Controller: User: create: Created User Successfully!")
+				res.render('pages/index', { "status": 201, "data": { "message": "Account succesfully created!", "alertType": "success" } });
+			}
+		});
 	};
-
-	const user = new User({
-		password: req.body.password,
-		email: req.body.email,
-		type: "user"
-	});
-
-
-	User.create(user, (err, data) => {
-		if (err) {
-			res.render('pages/signup', { "status": 500, "data": { "message": err.message, "alertType": "danger" } })
-		}
-
-		else {
-			console.log("Controller: User: create: Created User Successfully!")
-			res.render('pages/index', { "status": 201, "data": { "message": "Account succesfully created!", "alertType": "success" } });
-		}
-	});
 };
 
 exports.signin = (req, res) => {
