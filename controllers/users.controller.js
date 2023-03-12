@@ -1,14 +1,14 @@
 const User = require('../models/users.model.js')
 
 exports.create = (req, res) => {
-	if (!req.body){
-		res.send("email or password cannot be empty !")
+	if (!req.body) {
+		res.render('pages/signup', { "status": 400, "data": { "message": "Values cannot be empty!", "alertType": "danger" } });
 	};
 
-	if (req.body.email.includes("admin") || req.body.email.includes("buyme.com")){
-		res.send("Restricted Email. Please use another email.")
+	if (req.body.email.includes("admin") || req.body.email.includes("buyme.com")) {
+		res.render('pages/signup', { "status": 400, "data": { "message": "Restricted email. Please use another email id", "alertType": "danger" } });
 	};
-	
+
 	const user = new User({
 		password: req.body.password,
 		email: req.body.email,
@@ -17,24 +17,24 @@ exports.create = (req, res) => {
 
 
 	User.create(user, (err, data) => {
-		if (err)
-			res.status(500).send({
-				message:
-					err.message || "Controller: User: create: Error occured in creating user."
-			});
-		else
+		if (err) {
+			res.render('pages/signup', { "status": 500, "data": { "message": err.message, "alertType": "danger" } })
+		}
+
+		else {
 			console.log("Controller: User: create: Created User Successfully!")
-			res.send(data)
+			res.render('pages/index', { "status": 201, "data": { "message": "Account succesfully created!", "alertType": "success" } });
+		}
 	});
 };
 
 exports.signin = (req, res) => {
-	if (!req.body){
+	if (!req.body) {
 		res.send("email or password cannot be empty !")
 	};
 	var type = "";
 
-	if (req.body.email.includes("admin")){
+	if (req.body.email.includes("admin")) {
 		type = "admin"
 	} else if (req.body.email.includes("buyme.com")) {
 		type = "custRep"
@@ -49,14 +49,13 @@ exports.signin = (req, res) => {
 	});
 
 	User.signin(user, (err, data) => {
-		if (err)
-			res.status(500).send({
-				message:
-					err.message || "Controller: User: sigin: Error occured in sigin."
-			});
-		else
+		if (err) {
+			res.render('pages/index', { "status": 500, "data": { "message": err.message, "alertType": "danger" } });
+		}
+		else {
 			console.log("Controller: User: create: Sigin Successful!")
-			res.send(data)
+			res.render('pages/home', { "status": 200, "data": data });
+		}
 	});
 
 };

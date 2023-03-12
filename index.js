@@ -11,18 +11,18 @@ const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.set('view engine', 'ejs');
 
 
 // Default route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/views/index.html"))
+  res.render('pages/index');
 });
 
 app.use("/", usersRouter)
 app.use("/items", itemsRouter)
 
-
+app.use(express.static(__dirname + "/public"));
 
 // Server Listen
 app.listen(port, () => {

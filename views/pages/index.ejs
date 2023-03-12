@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <div class="d-flex">
+        <img src="/logo.png" width="175" height="150">
+    </div>
+    <div class="d-flex justify-content-end">
+        <div class="fixed-right" id="liveAlertPlaceholder"></div>
+    </div>
+    <% if( locals.data ) { %>
+        <% if( locals.data.message ) { %>
+            <script>
+                const createAlert = (message, type) => {
+                    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+                    const wrapper = document.createElement('div')
+                    wrapper.innerHTML = [
+                        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                        `   <div>${message}</div>`,
+                        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                        '</div>'
+                    ].join('')
+                    alertPlaceholder.append(wrapper)
+                };
+                createAlert("<%= data.message %>", "<%= data.alertType %>")
+            </script>
+        <% } %>
+    <% } %>
+    <div class="d-flex justify-content-lg-center pt-5">
+        <p class="fs-3">Hello, welcome to BuyMe!</p>
+    </div>
+    <div class="d-flex justify-content-lg-center">
+        <div class="w-25">
+            <form action="/signin" method="POST">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingEmail" placeholder="test@example.com" name="email" required>
+                    <label for="floatingEmail">Email Address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="d-flex justify-content-lg-center">
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="d-flex justify-content-lg-center pt-5">
+        <form action="/signup" method="GET" id="signupForm">
+            <p class="fs-6">Don't have an Account?<a href="javascript:;" onclick="document.getElementById('signupForm').submit();">Sign
+                Up</a></p>
+        </form>
+    </div>
+</body>
+
+<footer>
+    <%- include('../partials/footer'); %>
+</footer>
+
+</html>
