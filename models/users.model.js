@@ -70,7 +70,7 @@ User.signin = (newUser, result) => {
 			});
 		} else {
 			console.log("Model: User: signin: Error user does not exist. Please signup!")
-			result({ "message": "Error user does not exist. Please signup!" });
+			result({ "message": "Error user does not exist. Please signup!" }, null);
 		};
 	});
 };
