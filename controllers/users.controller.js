@@ -53,7 +53,10 @@ exports.signin = (req, res) => {
 		}
 		else {
 			console.log("Controller: User: create: Sigin Successful!")
-			res.render('pages/home', { "status": 200, "data": data });
+			req.session.loggedIn = true
+			req.session.user = data.user
+			console.log(req.session)
+			res.redirect('/home')
 		}
 	});
 

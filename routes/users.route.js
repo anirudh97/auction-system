@@ -10,5 +10,13 @@ router.get('/signup', (req, res) => {
 	res.render('pages/signup');
 });
 
+router.get('/home', (req, res) => {
+	res.render('pages/home', {data: {user: req.session.user}});
+})
+
+router.get('/logout', (req, res) => {
+	req.session.destroy();
+	res.render('pages/index');
+})
 module.exports = router;
 

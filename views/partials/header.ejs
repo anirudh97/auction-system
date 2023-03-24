@@ -8,12 +8,12 @@
     }
 </style>
 
-<nav class="navbar navbar-expand-lg bg-primary">
+<nav class="navbar navbar-expand-lg bg-primary fixed-top">
     <div class="container-fluid">
         <form action="/" method="GET" id="homeForm">
             <div class="" id="logo" onclick="document.getElementById('homeForm').submit();">
-                <i class="fa-solid fa-cart-shopping fa-2x" style="color: #fff;"></i>
-                <span style="color: #fff;" class="fs-3">BuyMe</span>
+                <i class="fa-solid fa-cart-shopping fa-xl" style="color: #fff;"></i>
+                <span style="color: #fff;" class="fs-4">BuyMe</span>
             </div>
         </form>
         <div class="collapse navbar-collapse" id="navbarText">
@@ -51,13 +51,13 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        abc@gmail.com
+                        <%=data.user%>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <form action="/" method="GET" id="createAuctionForm">
+                            <form action="/logout" method="GET" id="createAuctionForm">
                                 <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
-                                    <a class="dropdown-item">Signout</a>
+                                    <a class="dropdown-item">Logout</a>
                                 </div>
                             </form>
                         </li>
