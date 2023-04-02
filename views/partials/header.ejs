@@ -19,7 +19,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item" style="margin-left: 25px;">
-                    <form action="/" method="GET" id="createAuctionForm">
+                    <form action="/auction/new" method="GET" id="createAuctionForm">
                         <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
                             <a class="nav-link" style="color: #fff;">Create New Auction</a>
                         </div>
@@ -51,7 +51,6 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <%=data.user%>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
