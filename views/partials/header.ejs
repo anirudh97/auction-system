@@ -51,11 +51,12 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
+                        <%=data.user%>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <form action="/logout" method="GET" id="createAuctionForm">
-                                <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                            <form action="/logout" method="GET" id="logoutForm">
+                                <div id="createAuction" onclick="document.getElementById('logoutForm').submit();">
                                     <a class="dropdown-item">Logout</a>
                                 </div>
                             </form>

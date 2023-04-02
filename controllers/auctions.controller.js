@@ -4,7 +4,11 @@ const Items = require('../models/items.model.js');
 exports.getAuctions = (req, res) => {
     isWinner = req.query.isWinner;
     console.log(typeof(isWinner));
-    if(isWinner != "false" && isWinner != "true"){
+
+    if (req.session.loggedIn != true){
+        res.redirect("/");
+    }
+    else if(isWinner != "false" && isWinner != "true"){
         res.status(400).send({"message": "Invalid query parameters"});
     }
     else {
