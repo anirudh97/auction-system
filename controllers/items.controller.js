@@ -36,7 +36,7 @@ exports.getItems = (req, res) => {
 			};
 		};
 
-		res.send(data)
+		res.send(items);
 	});
 };
 

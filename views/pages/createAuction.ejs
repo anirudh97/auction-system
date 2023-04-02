@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<header>
+    <%- include('../partials/header'); %>
+</header>
+
+<body>
+    <div class="d-flex justify-content-lg-center mt-5">
+        <div class="w-25">
+            <form action="/auctions/new" method="POST" id="createAuctionForm" enctype="multipart/form-data">
+                <div class="d-flex justify-content-lg-center mt-5 mb-3">
+                    <select class="form-select" aria-label="Default select example" name="category">
+                        <option selected>Item Category</option>
+                        <option value="1">Category 1</option>
+                        <option value="2">Category 3</option>
+                        <option value="3">Category 3</option>
+                      </select>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingBrand" placeholder="Brand" name="brand">
+                    <label for="floatingBrand">Brand</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingModel" placeholder="Model" name="model">
+                    <label for="floatingModel">Model</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingType" placeholder="Type" name="type">
+                    <label for="floatingType">Type</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingColor" placeholder="Color" name="color">
+                    <label for="floatingColor">Color</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="floatingInitialPrice" step="0.01" placeholder="Initial Price in Dollars" name="initialPrice">
+                    <label for="floatingInitialPrice">Initial Price in Dollars</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="floatingMinimumPrice"  step="0.01" placeholder="Minimum Price in Dollars" name="minimumPrice">
+                    <label for="floatingMinimumPrice">Minimum Price in Dollars</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="floatingBidIncrement" placeholder="Bid Increment" name="bidIncrement">
+                    <label for="floatingBidIncrement">Bid Increment</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="date" class="form-control" id="floatingClosingDate" placeholder="Closing Date" name="closingDate">
+                    <label for="floatingClosingDate">Closing Date (All Auctions end at 00:00 hrs)</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="file" id="itemImages" name="multi-files" accept='image/*' class="form-control" multiple>
+                    <label for="itemImages" class="form-label">Item Images</label>
+                </div>
+                <div class="d-flex justify-content-lg-center mt-3">
+                    <button type="submit" class="btn btn-primary w-100">Create
+                        New Auction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+<footer>
+    <%- include('../partials/footer'); %>
+</footer>
+
+</html>

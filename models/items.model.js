@@ -1,7 +1,7 @@
 const sql = require("./db.js");
 
 
-const Items = function (item) {
+function Items (item) {
 	this.brand = item.brand;
 	this.color = item.color;
 	this.type = item.type;
@@ -10,7 +10,7 @@ const Items = function (item) {
 	this.imagePaths = item.imagePaths;
 };
 
-exports.getItems = (result) => {
+Items.getItems = (result) => {
 	console.log("Model: Items: getItems: Invoked !")
 	sqlQuery = "SELECT items.itemId, items.brand, items.color, items.model, items.type, items.category, itemImages.imagePath from items LEFT JOIN itemImages ON items.itemId = itemImages.itemId";
 
@@ -28,9 +28,7 @@ exports.getItems = (result) => {
 
 
 Items.addItem = (newItem, result) => {
-	console.log("Model: Items: addItem: Invoked !")
-
-	console.log(newItem)
+	console.log("Model: Items: addItem: Invoked !");
 	sqlQueryItem = "INSERT INTO items(brand, model, color, type, category) VALUES(?, ?, ?, ?, ?)";
 
 	sql.query(sqlQueryItem, [newItem.brand, newItem.model, newItem.color, newItem.type, newItem.category], (err, res) => {
@@ -55,7 +53,8 @@ Items.addItem = (newItem, result) => {
 				return;
 			};
 			console.log("Model: Items: addItem: Added New Item image paths");
-			result(null, { "message": "inserted new item and image paths" });
+			lastInsertedIdQuery = "SELECT itemId FROM items WHERE itemId=(SELECT LAST_INSERT_ID())";
+			result(null, { "message": "inserted new item and image paths", "data": res.insertId });
 		});
 
 	})
