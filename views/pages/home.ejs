@@ -2,7 +2,17 @@
 <html>
   <head>
     <%- include('../partials/head'); %>
-  </head>
+    <script>
+        $(document).ready(function(){
+            $.get("/auctions?isWinner=true", function(data, status){
+                $.each(data, function (i){
+                    var pTag = $('<p>').html(data[i].auctionId);
+                    $('#target').append(pTag);
+                });
+            });
+        });
+    </script>
+</head>
 
   <header><%- include('../partials/header'); %></header>
 
