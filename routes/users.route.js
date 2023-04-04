@@ -11,7 +11,15 @@ router.get('/signup', (req, res) => {
 });
 
 router.get('/home', (req, res) => {
-	res.render('pages/home', {data: {user: req.session.user}});
+	if (req.session.alertData){
+		console.log("YOLO")
+		data = {data: {"user": req.session.user, "alertData": req.session.alertData}};
+		delete req.session.alertData;
+	}
+	else{
+		data = {data: {"user": req.session.user}};
+	};
+	res.render('pages/home', data);
 })
 
 router.get('/logout', (req, res) => {

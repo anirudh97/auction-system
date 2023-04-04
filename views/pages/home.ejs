@@ -38,7 +38,6 @@
               card_html += '</div></div>';
             
             $('#target').append(card_html);
-            console.log(data[i]);
           });
           };
         });
@@ -51,6 +50,27 @@
 </header>
 
 <body>
+  <% if( locals.data ) { %>
+    <% if( locals.data.alertData ) { %>
+        <div class="d-flex justify-content-end pt-5 mt-5">
+          <div class="fixed-right" id="liveAlertPlaceholder"></div>
+        </div>
+        <script>
+            const createAlert = (message, type) => {
+                const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+                const wrapper = document.createElement('div')
+                wrapper.innerHTML = [
+                    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                    `   <div>${message}</div>`,
+                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                    '</div>'
+                ].join('')
+                alertPlaceholder.append(wrapper)
+            };
+            createAlert("<%= data.alertData.message %>", "<%= data.alertData.alertType %>")
+        </script>
+    <% } %>
+<% } %>
   <div class="d-flex justify-content-lg-center pt-5 mt-5">
     <div class="input-group w-75">
       <select class="form-select">
@@ -72,7 +92,6 @@
     <div class="row row-cols-1 row-cols-md-3 g-4 mx-5 px-5" id="target">
     </div>
   </div>
-
 
 </body>
 

@@ -15,7 +15,6 @@ exports.getAuction = (req, res) => {
             else
                 console.log("Controller: Auctions: getAuction: Fetched Auction");
             
-            console.log(data);
             if(data != null){
                 auctions = [];
                 already_seen_items = new Set();
@@ -155,6 +154,7 @@ exports.create = (req, res) => {
                 }
                 else {
                     console.log("Controller: Auction: create: Created Auction Successfully!")
+                    req.session.alertData = {"message": "Auction created successfully", "alertType": "success"};
                     res.redirect('/home');
                 };
             });
