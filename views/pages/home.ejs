@@ -2,115 +2,78 @@
 <html>
 
 <head>
-    <%- include('../partials/head'); %>
+  <%- include('../partials/head'); %>
     <script>
-        $(document).ready(function(){
-            $.get("/auctions?isWinner=true", function(data, status){
-                $.each(data, function (i){
-                    var pTag = $('<p>').html(data[i].auctionId);
-                    $('#target').append(pTag);
-                });
-            });
+      $(document).ready(function () {
+        $.get("/auctions?isWinner=false", function (data, status) {
+          if(data.length == 0){
+            $('#noAuction').append('<p class="fs-4">No Auctions to display</p>');
+          }
+          else{
+            $.each(data, function (i) {
+              var card_html = '<div class="col"><div class="card"><img src="' + data[i].imagePaths[0] + '"class="card-img-top" alt="..."> <div class="card-body"> <h5 class="card-title">Card title</h5> <p class="card-text"> Closing Date: ' + data[i].closingDate + '</p></div></div></div>';
+              var card_html = '<div class="col" id=auction_' + data[i].auctionId + '"> <div class="card w-75 border-primary">';
+              var carousel_html = '<div id="item_carousel_' + data[i].itemId + '" class="carousel slide w-100"> <div class="carousel-inner">';
+              $.each(data[i].imagePaths, function (j){
+                var item_image = '<div class="carousel-item active"><img src="' + data[i].imagePaths[j] + '" class="d-block w-100" alt="item image"></div>';
+                carousel_html += item_image;
+              });
+              carousel_html += '</div>';
+              carousel_left_html = '<button class="carousel-control-prev" type="button" data-bs-target="#item_carousel_' + data[i].itemId + '" data-bs-slide="prev"> <span class="fa fa-angle-left fa-2x" aria-hidden="true" style="color: black"></span><span class="visually-hidden">Previous</span></button>';
+              carousel_right_html = '<button class="carousel-control-next" type="button" data-bs-target="#item_carousel_' + data[i].itemId + '" data-bs-slide="next"> <span class="fa fa-angle-right fa-2x" aria-hidden="true" style="color: black"></span> <span class="visually-hidden">Next</span></button></div>';
+              carousel_html += carousel_left_html;
+              carousel_html += carousel_right_html;
+
+              card_html += carousel_html;
+
+              card_body_html = '<div class="card-body"><form action="/auctions/' + data[i].auctionId + '" method="GET"><h5 class="card-title">Item Category: ' + data[i].category + '</h5>';
+              card_body_brand = '<p class="card-text">Brand: ' + data[i].brand + '</p><p>Type: ' + data[i].type + '</p>';
+              card_body_html += card_body_brand;
+              card_body_closing = '<p class="card-text">Closing Date: ' + data[i].closingDate +'</p>';
+              card_body_html += card_body_closing;
+              
+              card_body_html += '<div class="col text-center"><button type="submit" class="btn btn-primary w-100">Go to Auction</button></div></form></div>';
+              card_html += card_body_html;
+
+              card_html += '</div></div>';
+            
+            $('#target').append(card_html);
+            console.log(data[i]);
+          });
+          };
         });
+      });
     </script>
 </head>
 
 <header>
-    <%- include('../partials/header'); %>
+  <%- include('../partials/header'); %>
 </header>
 
 <body>
-    <div class="d-flex justify-content-lg-center pt-5 mt-5">
-        <div class="input-group w-75">
-            <select class="form-select">
-                <option selected>Choose Category</option>
-                <option value="Category1">Category1</option>
-                <option value="Category2">Category2</option>
-                <option value="Category3">Category3</option>
-            </select>
-            <input type="text" class="form-control w-50" placeholder="Search.....">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
+  <div class="d-flex justify-content-lg-center pt-5 mt-5">
+    <div class="input-group w-75">
+      <select class="form-select">
+        <option selected>Choose Category</option>
+        <option value="Category1">Category1</option>
+        <option value="Category2">Category2</option>
+        <option value="Category3">Category3</option>
+      </select>
+      <input type="text" class="form-control w-50" placeholder="Search....." />
+      <button type="submit" class="btn btn-primary">Search</button>
     </div>
-    <div class="d-flex justify-content-lg-center pt-5">
-        <p class="fs-4">Top 5 Trending Auctions</p>
+  </div>
+  <div class="d-flex justify-content-lg-center pt-5">
+    <p class="fs-4">Live Auctions</p>
+  </div>
+  <div class="d-flex justify-content-lg-center pt-5" id="noAuction">
+  </div>
+  <div class="d-flex justify-content-lg-center pt-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mx-5 px-5" id="target">
     </div>
-    <div class="d-flex justify-content-lg-center pt-5">
-        <div class="row row-cols-1 row-cols-md-3 g-4 w-75">
-            <div class="col">
-                <div class="card h-100">
-                    <img src="/sunglasses.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <img src="/sunglasses.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This card has supporting text below as a natural lead-in to additional
-                            content.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <img src="/sunglasses.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This card has even longer content than the first to show that equal
-                            height action.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <img src="/sunglasses.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This card has even longer content than the first to show that equal
-                            height action.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <img src="/sunglasses.jpeg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This card has even longer content than the first to show that equal
-                            height action.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
+  </div>
 
-<footer>
-    <%- include('../partials/footer'); %>
-</footer>
+
+</body>
 
 </html>
