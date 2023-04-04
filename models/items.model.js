@@ -12,7 +12,7 @@ function Items (item) {
 
 Items.getItems = (result) => {
 	console.log("Model: Items: getItems: Invoked !")
-	sqlQuery = "SELECT items.itemId, items.brand, items.color, items.model, items.type, items.category, itemImages.imagePath from items LEFT JOIN itemImages ON items.itemId = itemImages.itemId";
+	sqlQuery = "SELECT item.item_id, items.brand, item.color, item.model, item.type, item.category, itemImages.imagePath FROM item LEFT JOIN itemImages ON item.item_id = itemImages.item_id";
 
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
@@ -29,7 +29,7 @@ Items.getItems = (result) => {
 
 Items.addItem = (newItem, result) => {
 	console.log("Model: Items: addItem: Invoked !");
-	sqlQueryItem = "INSERT INTO items(brand, model, color, type, category) VALUES(?, ?, ?, ?, ?)";
+	sqlQueryItem = "INSERT INTO item (brand, model, color, type, category) VALUES(?, ?, ?, ?, ?)";
 
 	sql.query(sqlQueryItem, [newItem.brand, newItem.model, newItem.color, newItem.type, newItem.category], (err, res) => {
 		if (err) {
@@ -39,7 +39,7 @@ Items.addItem = (newItem, result) => {
 		};
 		console.log("Model: Items: addItem: Added New Item")
 
-		sqlQueryImage = "INSERT INTO itemImages(itemId, imagePath) VALUES ?";
+		sqlQueryImage = "INSERT INTO itemImages(item_id, imagePath) VALUES ?";
 		itemImages = []
 
 		for (let i in newItem.imagePaths) {
@@ -53,7 +53,7 @@ Items.addItem = (newItem, result) => {
 				return;
 			};
 			console.log("Model: Items: addItem: Added New Item image paths");
-			lastInsertedIdQuery = "SELECT itemId FROM items WHERE itemId=(SELECT LAST_INSERT_ID())";
+			lastInsertedIdQuery = "SELECT item_id FROM item WHERE item_id=(SELECT LAST_INSERT_ID())";
 			result(null, { "message": "inserted new item and image paths", "data": res.insertId });
 		});
 

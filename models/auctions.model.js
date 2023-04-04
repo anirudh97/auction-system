@@ -8,20 +8,36 @@ const Auction = function(auction){
     this.minimumPrice = auction.minimumPrice;
     this.winner = auction.winner;
     this.itemId = auction.itemId;
+    this.email = auction.email;
 }
 
+Auction.getAuction = (auctionId, result) => {
+    console.log(auctionId)
+    console.log("Model: Auctions: getAuction: Invoked !");
+    sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, bid_increment,auction.item_id, category, brand, type, color, model, imagePath, imageId FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.auction_id = " + sql.escape(auctionId);;
+    
+	sql.query(sqlQuery, (err, res) => {
+		if (err) {
+			console.log("Model: Auction: getAuction: Error in getting Auction: ", err);
+			result({ "message": err }, null);
+			return;
+		}
+		result(null, res)
+
+	});
+}
 Auction.getAuctions = (isWinner,result) => {
 	console.log("Model: Auctions: getAuctions: Invoked !");
     if (isWinner == "true"){
-        sqlQuery = "SELECT auctions.auctionId, auctions.itemId, auctions.finalPrice, auctions.initialPrice, auctions.minimumPrice, auctions.bidIncrement, auctions.closingDate, auctions.winner, itemImages.imagePath FROM auctions LEFT JOIN itemImages ON auctions.itemId = itemImages.itemId ORDER BY auctions.itemId DESC";
+        sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId FROM auction JOIN item_images USING(item_id) ORDER BY auction.id;";
     }
     else{
-        sqlQuery = "SELECT auctions.auctionId, auctions.itemId, auctions.finalPrice, auctions.initialPrice, auctions.minimumPrice, auctions.bidIncrement, auctions.closingDate, auctions.winner, itemImages.imagePath FROM auctions LEFT JOIN itemImages ON auctions.itemId = itemImages.itemId WHERE auctions.winner != 'NA' ORDER BY auctions.itemId DESC";
+        sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.winner = 'NA'";
     }
     
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
-			console.log("Model: Auction: getAuctions: Error in getting Auctions !");
+			console.log("Model: Auction: getAuctions: Error in getting Auctions: ", err);
 			result({ "message": err }, null);
 			return;
 		}
@@ -33,10 +49,10 @@ Auction.getAuctions = (isWinner,result) => {
 Auction.create = (auction, result) => {
 
     console.log("Model: Auctions: create: Invoked !");
-    sqlQuery = "INSERT INTO auctions(itemId, finalPrice, initialPrice, minimumPrice, bidIncrement, closingDate, winner) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    sqlQuery = "INSERT INTO auction (item_id, email, final_price, initial_price, minimum_price, bid_increment, closing_date, winner) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
     console.log(auction);
-    sql.query(sqlQuery, [auction.itemId, auction.finalPrice, auction.initialPrice, auction.minimumPrice, auction.bidIncrement, auction.closingDate, auction.winner], (err, res) => {
+    sql.query(sqlQuery, [auction.itemId, auction.email, auction.finalPrice, auction.initialPrice, auction.minimumPrice, auction.bidIncrement, auction.closingDate, auction.winner], (err, res) => {
         if (err) {
             console.log("Model: Auctions: create: Error !", err);
 			result({ "meesage": err }, null);

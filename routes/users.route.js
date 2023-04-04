@@ -16,7 +16,7 @@ router.get('/home', (req, res) => {
 
 router.get('/logout', (req, res) => {
 	req.session.destroy();
-	res.render('pages/index');
+	res.redirect('/');
 })
 module.exports = router;
 

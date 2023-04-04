@@ -11,7 +11,14 @@ const User = function (user) {
 User.create = (newUser, result) => {
 	console.log("Model: User: create: Invoked !");
 
-	sqlQueryCheck = "SELECT * FROM users WHERE email = " + sql.escape(newUser.email)
+	if(newUser.type == "custRep"){
+		sqlQueryCheck = "SELECT * FROM customer_rep WHERE email = " + sql.escape(newUser.email);
+		sqlQuery = "INSERT INTO customer_rep(email, password) VALUES(?,?)";
+	}
+	else {
+		sqlQueryCheck = "SELECT * FROM end_user WHERE email = " + sql.escape(newUser.email);
+		sqlQuery = "INSERT INTO end_user(email, password) VALUES(?,?)";
+	};
 	sql.query(sqlQueryCheck, (err, res) => {
 		if (err) {
 			console.log("Model: User: create check: Error !: ", err)
@@ -30,14 +37,13 @@ User.create = (newUser, result) => {
 					result({ "message": hashErr }, null)
 				};
 
-				sqlQuery = "INSERT INTO users(email, password, type) VALUES(?,?,?)";
-				sql.query(sqlQuery, [newUser.email, hash, newUser.type], (err, res) => {
+				sql.query(sqlQuery, [newUser.email, hash], (err, res) => {
 					if (err) {
 						console.log("Model: User: create: Error !: ", err)
 						result({ "message": err }, null);
 					};
 					// console.log("Model: User: create: User Added: ", {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type});
-					result(null, { id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type })
+					result(null, { id: res.insertId, "user": newUser.email, "type": newUser.type })
 				});
 			});
 		};
@@ -49,7 +55,15 @@ User.create = (newUser, result) => {
 
 User.signin = (newUser, result) => {
 	console.log("Model: User: signin: Invoked !");
-	sqlQuery = "SELECT * FROM users WHERE email = " + sql.escape(newUser.email)
+	if(newUser.type == "custRep"){
+		sqlQuery = "SELECT * FROM customer_rep WHERE email = " + sql.escape(newUser.email);
+	}
+	else if(newUser.type == "admin"){
+		sqlQuery = "SELECT * FROM admin WHERE email = " + sql.escape(newUser.email);
+	}
+	else{
+		sqlQuery = "SELECT * FROM end_user WHERE email = " + sql.escape(newUser.email);
+	};
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("Model: User: signin: Error !: ", err)

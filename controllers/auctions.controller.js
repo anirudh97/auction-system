@@ -1,9 +1,63 @@
 const Auction = require('../models/auctions.model.js');
 const Items = require('../models/items.model.js');
 
+exports.getAuction = (req, res) => {
+    if (req.session.loggedIn != true){
+        res.redirect("/");
+    }
+    else{
+        Auction.getAuction(req.params.auctionId, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Controller: Auctions: getAuction: Some error occured"
+                });
+            else
+                console.log("Controller: Auctions: getAuction: Fetched Auction");
+            
+            console.log(data);
+            if(data != null){
+                auctions = [];
+                already_seen_items = new Set();
+                item_images = {};
+                for (let i = 0; i < data.length; i++) {
+                    imagePathClean = data[i].imagePath.split('public')[1];
+                    if (data[i].item_id in item_images) {
+                        item_images[data[i].item_id].push(imagePathClean)
+                    } else {
+                        item_images[data[i].item_id] = [imagePathClean]
+                    };
+                };
+                for (let i = 0; i < data.length; i++) {
+                    if (already_seen_items.has(data[i].item_id)) {
+                        continue
+                    } else {
+                        auctions.push({
+                            "auctionId": data[i].auction_id,
+                            "closingDate": data[i].closing_date,
+                            "itemId": data[i].item_id,
+                            "imagePaths": item_images[data[i].item_id],
+                            "brand": data[i].brand,
+                            "category": data[i].category,
+                            "type": data[i].type,
+                            "color": data[i].color,
+                            "model": data[i].model,
+                            "bidIncrement": data[i].bid_increment
+                        });
+        
+                        already_seen_items.add(data[i].item_id);
+                    };
+                };
+                res.send(auctions);
+            }
+            else {
+                res.send([]);
+            }
+        })
+    }
+}
 exports.getAuctions = (req, res) => {
     isWinner = req.query.isWinner;
-    console.log(typeof(isWinner));
 
     if (req.session.loggedIn != true){
         res.redirect("/");
@@ -20,34 +74,41 @@ exports.getAuctions = (req, res) => {
                 });
             else
                 console.log("Controller: Auctions: getAuctions: Fetched all Auctions");
-            
-            auctions = []
-            already_seen_items = new Set();
-            item_images = {}
-    
-            for (let i = 0; i < data.length; i++) {
-                if (data[i].itemId in item_images) {
-                    item_images[data[i].itemId].push(data[i].imagePath)
-                } else {
-                    item_images[data[i].itemId] = [data[i].imagePath]
+        
+            if(data != null){
+                auctions = [];
+                already_seen_items = new Set();
+                item_images = {};
+                for (let i = 0; i < data.length; i++) {
+                    imagePathClean = data[i].imagePath.split('public')[1];
+                    if (data[i].item_id in item_images) {
+                        item_images[data[i].item_id].push(imagePathClean)
+                    } else {
+                        item_images[data[i].item_id] = [imagePathClean]
+                    };
                 };
-            };
-    
-            for (let i = 0; i < data.length; i++) {
-                if (already_seen_items.has(data[i].itemId)) {
-                    continue
-                } else {
-                    auctions.push({
-                        "auctionId": data[i].auctionId, "finalPrice": data[i].finalPrice, "closingDate": data[i].closingDate,
-                        "bidIncrement": data[i].bidIncrement,
-                        "itemId": data[i].itemId,
-                        "imagePaths": item_images[data[i].itemId]
-                    });
-    
-                    already_seen_items.add(data[i].itemId)
+                for (let i = 0; i < data.length; i++) {
+                    if (already_seen_items.has(data[i].item_id)) {
+                        continue
+                    } else {
+                        auctions.push({
+                            "auctionId": data[i].auction_id,
+                            "closingDate": data[i].closing_date,
+                            "itemId": data[i].item_id,
+                            "imagePaths": item_images[data[i].item_id],
+                            "brand": data[i].brand,
+                            "category": data[i].category,
+                            "type": data[i].type
+                        });
+        
+                        already_seen_items.add(data[i].item_id);
+                    };
                 };
-            };
-            res.send(auctions);
+                res.send(auctions);
+            }
+            else {
+                res.send([]);
+            }
         })
     };
 };
@@ -78,18 +139,19 @@ exports.create = (req, res) => {
         else {
             console.log("Controller: Auctions: addItem: addItem Successful!");
             const auction = new Auction({
+                email: req.session.user,
                 closingDate: req.body.closingDate,
                 bidIncrement: req.body.bidIncrement,
                 initialPrice: req.body.initialPrice,
                 minimumPrice: req.body.minimumPrice,
                 itemId: data.data,
                 winner: "NA",
-                finalPrice: 0.0
+                finalPrice: 0
             });
 
             Auction.create(auction, (err, data) => {
                 if (err) {
-                    res.render('pages/signup', { "status": 500, "data": { "message": err.message } })
+                    res.render('pages/createAuction', { "status": 500, "data": { "message": err.message } })
                 }
                 else {
                     console.log("Controller: Auction: create: Created Auction Successfully!")
