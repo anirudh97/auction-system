@@ -17,7 +17,7 @@ app.set('view engine', 'ejs');
 
 // Default route
 app.get("/", (req, res) => {
-  res.render('pages/index');
+  res.render('pages/myAuctions');
 });
 
 app.use("/", usersRouter);

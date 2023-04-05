@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+
+  <script>
+    const validateEmail = (emailValue) => {
+        // Change the email add ka domain in regex 
+        return emailValue.match( 
+            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    }
+    const createAlert = (message, type) => {
+        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+
+        alertPlaceholder.append(wrapper)
+    };
+    const validateSignup = () => {
+        const pwd = document.getElementById("floatingPassword");
+        const pwdRetype = document.getElementById("floatingPasswordRetype");
+        const emailId = document.getElementById("floatingEmail");
+        
+        if (!emailId.value || !pwd.value || !pwdRetype.value){
+            createAlert("Fields cannot be empty!", "danger")
+        }
+        else if (!validateEmail(emailId.value)) {
+            createAlert("Invalid Email type.", "danger")
+        }
+        else if(pwd.value != pwdRetype.value){
+            createAlert("Both the passwords are not the same.", "danger")
+        }
+        else{
+            document.getElementById('signupForm').submit()
+        }
+    };
+</script>
+
+</head>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+    <div class="d-flex justify-content-center pt-5 mt-5">
+        <p class="fs-3">Add a Customer Representative Account</p>
+    </div>
+    <div class="d-flex justify-content-lg-center">
+        <div class="w-25">
+            <form action="/signup" method="POST" id="signupForm">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingEmail" placeholder="test@example.com"
+                        name="email" required>
+                    <label for="floatingEmail">Email Address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                        name="password" required>
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPasswordRetype"
+                        placeholder="Retype Password" name="retypePassword" required>
+                    <label for="floatingPassword">Retype Password</label>
+                </div>
+                <div class="d-flex justify-content-lg-center">
+                    <button type="button" class="btn btn-primary w-100" onclick="validateSignup()">Create
+                        Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container pt-4 mt-4">
+        <center><h3>Summary Report</h3><p></p>
+        <h5>Overview</h5></center><p></p>
+        <table class="table table-bordered" style="table-layout:fixed;">
+            <thead class="thead" style="background-color: #0d6efd; color: white">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Item</th>
+                <th scope="col">Total Earnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <center><h5>Item Statistics</h5></center><p></p>
+          <table class="table table-bordered" style="table-layout:fixed;">
+              <thead class="thead" style="background-color: #0d6efd; color: white">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Item: Item Category</th>
+                  <th scope="col">Total Earnings</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Mark</td>
+                  <td>Otto</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                  <td>Thornton</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Larry</td>
+                  <td>the Bird</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <center><h5>User Earnings</h5></center><p></p>
+          <table class="table table-bordered" style="table-layout:fixed;">
+              <thead class="thead" style="background-color: #0d6efd; color: white">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">User</th>
+                  <th scope="col">Total Earnings</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Mark</td>
+                  <td>Otto</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                  <td>Thornton</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Larry</td>
+                  <td>the Bird</td>
+                </tr>
+              </tbody>
+            </table>
+
+
+
+        </div>
+</body>
+</html>
