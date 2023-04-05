@@ -37,7 +37,7 @@ Items.addItem = (newItem, result) => {
 			result({ "meesage": err }, null);
 			return;
 		};
-		console.log("Model: Items: addItem: Added New Item")
+		console.log("Model: Items: addItem: Added New Item");
 
 		sqlQueryImage = "INSERT INTO itemImages(item_id, imagePath) VALUES ?";
 		itemImages = []
