@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+    <div class="d-flex justify-content-lg-center pt-5 mt-5">
+        <div class="w-25">
+            <center><h3>Add a New Item to Watchlist</h3></center>
+            <form action="/auctions/new" method="POST" id="createAuctionForm" enctype="multipart/form-data">
+                <div class="d-flex justify-content-lg-center mt-5 mb-3">
+                    <select class="form-select" aria-label="Default select example" name="category">
+                        <option selected>Item</option>
+                        <option value="1">Category 1</option>
+                        <option value="2">Category 3</option>
+                        <option value="3">Category 3</option>
+                      </select>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingBrand" placeholder="Brand" name="brand">
+                    <label for="floatingBrand">Brand</label>
+                </div>
+                <div class="d-flex justify-content-lg-center mt-3 mb-3">
+                    <select class="form-select" aria-label="Default select example" name="category">
+                        <option selected>Item Category</option>
+                        <option value="1">Category 1</option>
+                        <option value="2">Category 3</option>
+                        <option value="3">Category 3</option>
+                      </select>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingColor" placeholder="Color" name="color">
+                    <label for="floatingColor">Color</label>
+                </div>
+                <div class="d-flex justify-content-lg-center mt-3">
+                    <button type="submit" class="btn btn-primary w-100">Add to Watchlist</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container pt-4 mt-4">
+        <center><h3>Current Items in  Watchlist</h3></center><p></p>
+        <table class="table table-bordered" style="table-layout:fixed;">
+            <thead class="thead" style="background-color: #0d6efd; color: white">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Item: Item Category</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Color</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+</body>
+</html>
