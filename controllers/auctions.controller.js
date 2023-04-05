@@ -16,7 +16,7 @@ exports.getAuction = (req, res) => {
                 console.log("Controller: Auctions: getAuction: Fetched Auction");
             
             if(data != null){
-                auctions = [];
+                auctions = {};
                 already_seen_items = new Set();
                 item_images = {};
                 for (let i = 0; i < data.length; i++) {
@@ -31,7 +31,7 @@ exports.getAuction = (req, res) => {
                     if (already_seen_items.has(data[i].item_id)) {
                         continue
                     } else {
-                        auctions.push({
+                        auctions = {
                             "auctionId": data[i].auction_id,
                             "closingDate": data[i].closing_date,
                             "itemId": data[i].item_id,
@@ -43,12 +43,14 @@ exports.getAuction = (req, res) => {
                             "model": data[i].model,
                             "bidIncrement": data[i].bid_increment,
                             "amount": data[i].amount
-                        });
+                        };
         
                         already_seen_items.add(data[i].item_id);
                     };
                 };
-                res.send(auctions);
+
+                console.log(auctions);
+                res.render('pages/itemPage', { "status": 200, "message": "Successfully retreived auction", "data": auctions})
             }
             else {
                 res.send([]);

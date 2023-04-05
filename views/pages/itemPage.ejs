@@ -19,40 +19,36 @@
   <header><%- include('../partials/header'); %></header>
   <body>
     <div class="container pt-2 mt-5">
+      <div>
+        <%= message %>
+      </div>
       <div class="row mt-5">
         <div class="col pt-2 mt-5">
-        <!--   <h1>Item: Item Category </h1>
-          <h3>Brand: brand</h3>
-          <h3>Color: color</h3>
-          <h3>Current Price: price</h3>
-          <h3>Closing Time: date @ at 12 am night</h3>
-          <h3>Bid increment amount: $</h3>
-           -->
           <table class="table table-striped ">
             <tbody>
               <tr>
-                <th scope="row" style="background-color: #0d6efd; color: white; width: 33% ">Item </th>
-                <td>Item Category</td>
+                <th scope="row" style="background-color: #0d6efd; color: white; width: 33% ">Item</th>
+                <td><%= data.category %> : <%= data.type %></td>
               </tr>
               <tr>
                 <th scope="row" style="background-color: #0d6efd; color: white">Color</th>
-                <td>Color</td>
+                <td><%= data.color %></td>
               </tr>
               <tr>
                 <th scope="row" style="background-color: #0d6efd; color: white">Brand</th>
-                <td>Brand</td>
+                <td><%= data.brand %></td>
               </tr>
               <tr>
                 <th scope="row" style="background-color: #0d6efd; color: white">Current Price</th>
-                <td>$</td>
+                <td>$<%= data.amount %></td>
               </tr>
               <tr>
                 <th scope="row" style="background-color: #0d6efd; color: white">Closing Date and Time</th>
-                <td>03 August 2023 12:00 AM</td>
+                <td><%= data.closingDate %></td>
               </tr>
               <tr>
                 <th scope="row" style="background-color: #0d6efd; color: white">Bid Increment</th>
-                <td>$</td>
+                <td>$<%= data.bidIncrement %></td>
               </tr>
             </tbody>
           </table>
@@ -69,15 +65,11 @@
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
               </div>
               <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="uploads/dev.png" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="uploads/dev1.png" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="uploads/dev.png" class="d-block w-100" alt="...">
-                </div>
+                <% for(var i=0; i<data.imagePaths.length; i++) {%>
+                  <div class="carousel-item active">
+                    <img src="<%= data.imagePaths[i] %>" class="d-block w-100" alt="...">
+                  </div>
+                <% } %>
               </div>
               <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                 <span class="fa fa-angle-left fa-2x" style = "color:black" aria-hidden="true"></span>
