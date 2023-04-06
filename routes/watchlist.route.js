@@ -4,7 +4,7 @@ const router = express.Router();
 const watchlist = require("../controllers/watchlist.controller.js");
 
 router.get('/', watchlist.getWatchlist);
-router.get('addWatchlist', watchlist.addToWatchlist);
+router.post('/addWatchlist', watchlist.addToWatchlist);
 router.get('/trackWatchlist', watchlist.trackWatchlist);
 
 

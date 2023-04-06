@@ -104,7 +104,7 @@ exports.getAuctions = (req, res) => {
         res.status(400).send({"message": "Invalid query parameters"});
     }
     else {
-        Auction.getAuctions(isWinner, (err, data) => {
+        Auction.getAuctions(isWinner, req.session.user, (err, data) => {
             if (err)
                 res.status(500).send({
                     message:

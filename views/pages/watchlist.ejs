@@ -13,21 +13,13 @@
     <div class="d-flex justify-content-lg-center pt-5 mt-5">
         <div class="w-25">
             <center><h3>Add a New Item to Watchlist</h3></center>
-            <form action="/auctions/new" method="POST" id="createAuctionForm" enctype="multipart/form-data">
-                <div class="d-flex justify-content-lg-center mt-5 mb-3">
-                    <select class="form-select" aria-label="Default select example" name="category">
-                        <option selected>Item</option>
-                        <option value="1">Category 1</option>
-                        <option value="2">Category 3</option>
-                        <option value="3">Category 3</option>
-                      </select>
-                </div>
+            <form action="/watchlist/addWatchlist" method="POST" id="createWatchlistForm">
                 <div class="d-flex justify-content-lg-center mt-3 mb-3">
                   <select class="form-select" aria-label="Default select example" name="category">
                       <option selected>Item Category</option>
-                      <option value="1">Category 1</option>
-                      <option value="2">Category 3</option>
-                      <option value="3">Category 3</option>
+                      <option value="caps">Caps</option>
+                      <option value="sunglasses">Sunglasses</option>
+                      <option value="wristwatch">Wristwatch</option>
                     </select>
               </div>
                 <div class="form-floating mb-3">
@@ -51,30 +43,20 @@
             <thead class="thead" style="background-color: #0d6efd; color: white">
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Item: Item Category</th>
+                <th scope="col">Item Category</th>
                 <th scope="col">Brand</th>
                 <th scope="col">Color</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+              <% for(var i=0; i<data.length; i++) {%>
+                <tr>
+                  <th scope="row"><%= i+1 %></th>
+                  <td><%= data[i].category %></td>
+                  <td><%= data[i].brand %></td>
+                  <td><%= data[i].color %></td>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>

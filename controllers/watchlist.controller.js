@@ -14,7 +14,6 @@ exports.getWatchlist = (req, res) => {
                 });
             else
                 console.log("Controller: Watchlist: getWatchlist: Fetched watchlist");
-            
             res.render('pages/watchlist', { "status": 200, "message": "Successfully retreived watchlist", "data": data});
         });
     }
