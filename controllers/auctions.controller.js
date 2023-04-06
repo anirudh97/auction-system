@@ -1,6 +1,41 @@
 const Auction = require('../models/auctions.model.js');
 const Items = require('../models/items.model.js');
 
+exports.getMyAuctions = (req, res) => {
+    if (req.session.loggedIn != true){
+        res.redirect("/");
+    }
+    else{
+        Auction.getMyAuctions(req.session.user, (err, data) => {
+            if (err)
+                res.status(500).send({
+                    message:
+                        err.message || "Controller: Auctions: getMyAuctions: Some error occured"
+                });
+            else
+                console.log("Controller: Auctions: getAuction: Fetched My Auctions");
+            
+            
+            created_auction_ids = new Set();
+            
+            allData = {"createdAuction": data.createdAuction};
+            bidAuction = [];
+            for (var i =0; i < data.createdAuction.length; i++){
+                created_auction_ids.add(data.createdAuction[i].auction_id);
+            }
+
+            for (var i =0; i < data.bidAuction.length; i++){
+                if(!created_auction_ids.has(data.bidAuction[i].auction_id)){
+                    bidAuction.push(data.bidAuction[i]);
+                }
+            }
+            allData["bidAuction"] = bidAuction;
+
+            res.render('pages/myAuctions', { "status": 200, "message": "Successfully retreived my auctions", "data": allData})
+        });
+    };
+};
+
 exports.getAuction = (req, res) => {
     if (req.session.loggedIn != true){
         res.redirect("/");
@@ -57,7 +92,8 @@ exports.getAuction = (req, res) => {
             }
         })
     }
-}
+};
+
 exports.getAuctions = (req, res) => {
     isWinner = req.query.isWinner;
 
@@ -163,5 +199,4 @@ exports.create = (req, res) => {
             });
         }
     });
-
 };

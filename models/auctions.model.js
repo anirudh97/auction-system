@@ -11,6 +11,27 @@ const Auction = function(auction){
     this.email = auction.email;
 }
 
+Auction.getMyAuctions = (email, result) => {
+    console.log("Model: Auctions: getMyAuctions: Invoked !");
+    sqlQueryCreatedAuction = "SELECT category, type, brand, auction_id FROM item JOIN auction USING(item_id) WHERE email = " + sql.escape(email);
+    sql.query(sqlQueryCreatedAuction, (errCreatedAuction, resCreatedAuction) => {
+		if (errCreatedAuction) {
+			console.log("Model: Auction: getMyAuctions: Error in getting My Auctions: ", errCreatedAuction);
+			result({ "message": errCreatedAuction }, null);
+			return;
+		}
+        sqlQueryBidAuction = "SELECT category, type, brand, auction_id FROM item JOIN auction USING(item_id) JOIN bid USING(auction_id) Where auction.email = " + sql.escape(email);
+        sql.query(sqlQueryBidAuction, (errBidAuction, resBidAuction) => {
+            if (errBidAuction) {
+                console.log("Model: Auction: getMyAuctions: Error in getting My Auctions: ", errBidAuction);
+                result({ "message": errBidAuction }, null);
+                return;
+            }
+            result(null, {"createdAuction": resCreatedAuction, "bidAuction": resBidAuction});
+        });
+	});
+
+}
 Auction.getAuction = (auctionId, result) => {
     console.log("Model: Auctions: getAuction: Invoked !");
     sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)), bid_auction AS( select amount, auction_id FROM bid WHERE auction_id = " +  sql.escape(auctionId)+ " ORDER BY bid_timestamp DESC LIMIT 1) select auction_id, closing_date, bid_increment, auction.item_id, category, brand, type, color, model, imagePath, imageId, amount FROM auction JOIN item_images USING(item_id) JOIN bid_auction USING(auction_id) WHERE auction.auction_id = " + sql.escape(auctionId);

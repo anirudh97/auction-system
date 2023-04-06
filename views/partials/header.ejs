@@ -6,11 +6,14 @@
     div:hover #createAuction {
         cursor: pointer;
     }
+    div:hover #createMyAuctionForm {
+        cursor: pointer;
+    }
 </style>
 
 <nav class="navbar navbar-expand-lg bg-primary fixed-top">
     <div class="container-fluid">
-        <form action="/" method="GET" id="homeForm">
+        <form action="/home" method="GET" id="homeForm">
             <div class="" id="logo" onclick="document.getElementById('homeForm').submit();">
                 <i class="fa-solid fa-cart-shopping fa-xl" style="color: #fff;"></i>
                 <span style="color: #fff;" class="fs-4">BuyMe</span>
@@ -26,15 +29,15 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/" method="GET" id="createAuctionForm">
-                        <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <form action="/auctions/myAuctions" method="GET" id="createMyAuctionForm">
+                        <div id="myAuctions" onclick="document.getElementById('createMyAuctionForm').submit();">
                             <a class="nav-link" style="color: #fff;">My Auctions</a>
                         </div>
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/" method="GET" id="createAuctionForm">
-                        <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <form action="/watchlist" method="GET" id="createWatchlistForm">
+                        <div id="createWatchlist" onclick="document.getElementById('createWatchlistForm').submit();">
                             <a class="nav-link" style="color: #fff;">My Watchlist</a>
                         </div>
                     </form>

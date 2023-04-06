@@ -28,7 +28,10 @@ var upload = multer({ storage: storage });
 
 router.post('/new', upload.array('multi-files'), auctions.create);
 
+router.get('/myAuctions', auctions.getMyAuctions);
+
 router.get('/:auctionId', auctions.getAuction);
+
 
 
 
