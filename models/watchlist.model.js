@@ -1,4 +1,5 @@
 const sql = require("./db.js");
+var async = require('async');
 
 const Watchlist = function(watchlist){
     this.email = watchlist.email;
@@ -33,6 +34,30 @@ Watchlist.addToWatchlist = (watchlist, result) => {
 	});
 };
 
+function executeQuery(d, email){
+    return new Promise (function(resolve, reject){
+        sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId, auction.email FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.winner = 'NA'" +  " AND auction.email != " + sql.escape(email) + " AND category = " + sql.escape(d.category) + " AND brand = " + sql.escape(d.brand) + " AND color = " + sql.escape(d.color);
+        sql.query(sqlQuery, (err, res) => {
+            if (err) {
+                return reject(err);
+            }
+            else{
+                resolve(res);
+            };
+        });
+    })
+}
+
+async function getMatches(resGetWatchlist, email){
+    var matchWatchlist = []
+    const promises = []
+    for(var i = 0; i < resGetWatchlist.length; i++){
+        promises.push(executeQuery(resGetWatchlist[i], email));
+    }
+    matchWatchlist = await Promise.all(promises);
+    // console.log(matchWatchlist);
+    return matchWatchlist;
+}
 Watchlist.trackWatchlist = (email, result) => {
     console.log("Model: Watchlist: trackWatchlist: Invoked !");
     sqlQueryGetWatchlist = "SELECT watchlist_id, email, category, brand, color FROM watchlist WHERE email = " + sql.escape(email);
@@ -43,24 +68,15 @@ Watchlist.trackWatchlist = (email, result) => {
 			return;
 		}
 		else{
-            var matchWatchlist = []
-            console.log(resGetWatchlist);
-            for(var i = 0; i < resGetWatchlist.length ; i++){
-                sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId, auction.email FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.winner = 'NA'" +  " AND auction.email != " + sql.escape(email) + " AND category = " + sql.escape(resGetWatchlist[i].category) + " AND brand = " + sql.escape(resGetWatchlist[i].brand) + " AND color = " + sql.escape(resGetWatchlist[i].color);
-                sql.query(sqlQuery, (err, res) => {
-                    if (err) {
-                        console.log("Model: Watchlist: getWatchlist: Some error occured !", err);
-                        result({ "message": err }, null);
-                        return;
-                    }
-                    else{
-                        matchWatchlist.concat(res);
-                    };
-                });
-            };
-            result(null, matchWatchlist);
+            getMatches(resGetWatchlist, email).then((matchWatchlist) => {
+                result(null, matchWatchlist);
+            })
+            .catch((err) => {
+                console.log("Model: Watchlist:trackWatchlist: Some error occured !", err);
+                result({ "message": err }, null);
+                return;
+            })
         };
 	});
 }
-
 module.exports = Watchlist;
