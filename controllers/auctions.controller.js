@@ -1,3 +1,7 @@
+const sharp = require('sharp');
+const fs = require('fs');
+const path = require('path');
+
 const Auction = require('../models/auctions.model.js');
 const Items = require('../models/items.model.js');
 
@@ -151,12 +155,25 @@ exports.getAuctions = (req, res) => {
     };
 };
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
 
     paths = []
-    for (let i = 0; i < req.files.length; i++) {
-        paths.push(req.files[i].path)
-    };
+    await Promise.all(
+        req.files.map(async file => {
+            var { filename: image } = file;
+            let newFilename = path.resolve(file.destination,"resized-" + image);
+            paths.push(newFilename);
+            await sharp(file.path)
+            .resize(1200, 1200)
+            .toFormat("jpeg")
+            .jpeg({ quality: 100 })
+            .toFile(newFilename)
+        })
+    ).then(() => {
+        for (let i = 0; i < req.files.length; i++) {
+            fs.unlinkSync(req.files[i].path)
+        }
+    });
 
     const Item = new Items({
         model: req.body.model,
