@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+    <div class="container pt-2 mt-5">
+        <div class="row mt-5 pt-2">
+            <div class="col pt-2">
+                    <center><h3>Answered Queries</h3></center><p></p>
+                    <table class="table table-bordered" style="table-layout:fixed;">
+                        <thead class="thead" style="background-color: #0d6efd; color: white">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Question</th>
+                            <th scope="col">Answer</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+            
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                          </tr>
+                        </tbody>
+                      </table>
+            
+
+            </div>
+            <div class="col pt-2">
+                <h3>Type in your Question:</h3>
+                <div class="p-3 mb-2 w-80">
+                    <form action="" method="" id="">
+                        
+                        <div class="form-floating mb-1">
+                            <input type="text" class="form-control" id="answer" placeholder="Answer"
+                                name="answer" required>
+                            <label for="floatingEmail">Enter Question</label>
+                        </div>
+                        <div class="d-flex justify-content-lg-center pt-3">
+                            <button type="button" class="btn btn-primary w-25" >Post Question</button>
+                        </div>
+                    </form>
+                    </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</body>
+</html>

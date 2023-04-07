@@ -63,13 +63,26 @@
             </tr>
           </tbody>
         </table>
-        <div class="mt-5 ">
+        <div class="mt-2 ">
           <% if(data.email == data.loggedUser){ %>
             <h5>You created the Auction. Cannot bid.</h5>
           <% } else{ %>  
-            <button type="button" class="btn btn-primary ">Post bid</button>
-         <% } %>
-        </div>
+            <div class="d-flex justify-content-lg-center pt-2">
+              <button type="button" class="btn btn-primary w-50" >Post Bid</button>
+          </div><p></p>
+          <form action="" method="" id="">
+              <h5>Set Upper Limit</h5>
+              <div class="form-floating mb-1">
+                  <input type="text" class="form-control" id="u_limit" placeholder="u_limit"
+                      name="u_limit" required>
+                  <label for="floatingEmail">Upper Limit</label>
+              </div>
+              <div class="d-flex justify-content-lg-center pt-3">
+                  <button type="button" class="btn btn-primary w-50" >Set Auto Bid</button>
+              </div>
+          </form>
+          <% } %>
+          </div>
       </div>
       <div class="col">
         <div class="container_carousel pt-1 mt-5">
