@@ -1,87 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <%- include('../partials/head'); %>
-  </head>
-  
-  <style>
-    .container_carousel {
-      float: right;
-      float: top;
-      height: 600px;
-      width: 600px;   
-    }
-    .table{
-      width: 100%;
-    }
 
-  </style>
-  <header><%- include('../partials/header'); %></header>
-  <body>
-    <div class="container pt-2 mt-5">
-      <div class="row mt-5">
-        <div class="col pt-2 mt-5">
-          <table class="table table-striped ">
-            <tbody>
-              <tr>
-                <th scope="row" style="background-color: #0d6efd; color: white; width: 33% ">Item</th>
-                <td><%= data.category %> : <%= data.type %></td>
-              </tr>
-              <tr>
-                <th scope="row" style="background-color: #0d6efd; color: white">Color</th>
-                <td><%= data.color %></td>
-              </tr>
-              <tr>
-                <th scope="row" style="background-color: #0d6efd; color: white">Brand</th>
-                <td><%= data.brand %></td>
-              </tr>
-              <tr>
-                <th scope="row" style="background-color: #0d6efd; color: white">Current Price</th>
-                <td>$<%= data.amount %></td>
-              </tr>
-              <tr>
-                <th scope="row" style="background-color: #0d6efd; color: white">Closing Date and Time</th>
-                <td><%= data.closingDate %></td>
-              </tr>
-              <tr>
-                <th scope="row" style="background-color: #0d6efd; color: white">Bid Increment</th>
-                <td>$<%= data.bidIncrement %></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="mt-5 ">
-          <button type="button" class="btn btn-primary ">Post bid</button>
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<style>
+  .container_carousel {
+    float: right;
+    float: top;
+    height: 600px;
+    width: 600px;
+  }
+
+  .table {
+    width: 100%;
+  }
+</style>
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+  <div class="container pt-2 mt-5">
+    <div class="row mt-5">
+      <div class="col pt-2 mt-5">
+        <table class="table table-striped ">
+          <tbody>
+            <tr>
+              <th scope="row" style="background-color: #0d6efd; color: white; width: 33% ">Item</th>
+              <td>
+                <%= data.category %> : <%= data.type %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" style="background-color: #0d6efd; color: white">Color</th>
+              <td>
+                <%= data.color %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" style="background-color: #0d6efd; color: white">Brand</th>
+              <td>
+                <%= data.brand %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" style="background-color: #0d6efd; color: white">Current Price</th>
+              <td>$<%= data.amount %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" style="background-color: #0d6efd; color: white">Closing Date and Time</th>
+              <td>
+                <%= data.closingDate %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" style="background-color: #0d6efd; color: white">Bid Increment</th>
+              <td>$<%= data.bidIncrement %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-5 ">
+          <% if(data.email == data.loggedUser){ %>
+            <h5>You created the Auction. Cannot bid.</h5>
+          <% } else{ %>  
+            <button type="button" class="btn btn-primary ">Post bid</button>
+         <% } %>
         </div>
-        </div>
-        <div class="col">
-          <div class="container_carousel pt-1 mt-5">
-            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
-              <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-              </div>
-              <div class="carousel-inner">
-                <% for(var i=0; i<data.imagePaths.length; i++) {%>
-                  <div class="carousel-item active">
-                    <img src="<%= data.imagePaths[i] %>" class="d-block w-100" alt="...">
-                  </div>
+      </div>
+      <div class="col">
+        <div class="container_carousel pt-1 mt-5">
+          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <% for(var i=0; i<data.imagePaths.length; i++) {%>
+                <div class="carousel-item active">
+                  <img src="<%= data.imagePaths[i] %>" class="d-block w-100" alt="...">
+                </div>
                 <% } %>
-              </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="fa fa-angle-left fa-2x" style = "color:black" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="fa fa-angle-right fa-2x" style = "color:black" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-              </button>
             </div>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="prev">
+              <span class="fa fa-angle-left fa-2x" style="color:black" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="next">
+              <span class="fa fa-angle-right fa-2x" style="color:black" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
         </div>
       </div>
-      </div>
-  </body>
+    </div>
+  </div>
+</body>
 
-  <footer><%- include('../partials/footer'); %></footer>
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
 </html>

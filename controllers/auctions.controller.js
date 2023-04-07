@@ -81,7 +81,9 @@ exports.getAuction = (req, res) => {
                             "color": data[i].color,
                             "model": data[i].model,
                             "bidIncrement": data[i].bid_increment,
-                            "amount": data[i].amount
+                            "amount": data[i].amount,
+                            "email": data[i].email,
+                            "loggedUser": req.session.user
                         };
         
                         already_seen_items.add(data[i].item_id);

@@ -34,7 +34,7 @@ Auction.getMyAuctions = (email, result) => {
 }
 Auction.getAuction = (auctionId, result) => {
     console.log("Model: Auctions: getAuction: Invoked !");
-    sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)), bid_auction AS( select amount, auction_id FROM bid WHERE auction_id = " +  sql.escape(auctionId)+ " ORDER BY bid_timestamp DESC LIMIT 1) select auction_id, closing_date, bid_increment, auction.item_id, category, brand, type, color, model, imagePath, imageId, amount FROM auction JOIN item_images USING(item_id) JOIN bid_auction USING(auction_id) WHERE auction.auction_id = " + sql.escape(auctionId);
+    sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)), bid_auction AS( select amount, auction_id FROM bid WHERE auction_id = " +  sql.escape(auctionId)+ " ORDER BY bid_timestamp DESC LIMIT 1) select auction_id, closing_date, bid_increment, auction.item_id, category, brand, type, color, model, imagePath, imageId, amount, auction.email FROM auction JOIN item_images USING(item_id) JOIN bid_auction USING(auction_id) WHERE auction.auction_id = " + sql.escape(auctionId);
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("Model: Auction: getAuction: Error in getting Auction: ", err);
@@ -48,10 +48,10 @@ Auction.getAuction = (auctionId, result) => {
 Auction.getAuctions = (isWinner, email,result) => {
 	console.log("Model: Auctions: getAuctions: Invoked !");
     if (isWinner == "true"){
-        sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId FROM auction JOIN item_images USING(item_id) ORDER BY auction.id;";
+        sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId, auction.email FROM auction JOIN item_images USING(item_id) ORDER BY auction.id;";
     }
     else{
-        sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.winner = 'NA' AND auction.email != " + sql.escape(email);
+        sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId, auction.email FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.winner = 'NA' AND auction.email != " + sql.escape(email);
     }
     
 	sql.query(sqlQuery, (err, res) => {
