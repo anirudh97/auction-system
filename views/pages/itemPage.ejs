@@ -26,63 +26,66 @@
     <div class="row mt-5">
       <div class="col pt-2 mt-5">
         <table class="table table-striped ">
-          <tbody>
-            <tr>
-              <th scope="row" style="background-color: #0d6efd; color: white; width: 33% ">Item</th>
-              <td>
-                <%= data.category %> : <%= data.type %>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="background-color: #0d6efd; color: white">Color</th>
-              <td>
-                <%= data.color %>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="background-color: #0d6efd; color: white">Brand</th>
-              <td>
-                <%= data.brand %>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="background-color: #0d6efd; color: white">Current Price</th>
-              <td>$<%= data.amount %>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="background-color: #0d6efd; color: white">Closing Date and Time</th>
-              <td>
-                <%= data.closingDate %>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="background-color: #0d6efd; color: white">Bid Increment</th>
-              <td>$<%= data.bidIncrement %>
-              </td>
-            </tr>
-          </tbody>
+          <form method="POST" action="/bids/postBid/<%=data.auctionId%>" id="postBidForm">
+            <tbody>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white; width: 33% ">Item</th>
+                <td>
+                  <%= data.category %> : <%= data.type %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Color</th>
+                <td>
+                  <%= data.color %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Brand</th>
+                <td>
+                  <%= data.brand %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Current Price</th>
+                <td>
+                  $<input type="text" name="amount" readonly value="<%= data.amount %>">
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Closing Date and Time</th>
+                <td>
+                    <%= data.closingDate %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Bid Increment</th>
+                  <td>$<input type="text" name= "bidIncrement" value="<%= data.bidIncrement %>" readonly>
+                </td>
+              </tr>
+            </tbody>
+          </form>
         </table>
         <div class="mt-2 ">
-          <% if(data.email == data.loggedUser){ %>
+          <% if(data.email==data.loggedUser){ %>
             <h5>You created the Auction. Cannot bid.</h5>
-          <% } else{ %>  
-            <div class="d-flex justify-content-lg-center pt-2">
-              <button type="button" class="btn btn-primary w-50" >Post Bid</button>
-          </div><p></p>
-          <form action="" method="" id="">
-              <h5>Set Upper Limit</h5>
-              <div class="form-floating mb-1">
-                  <input type="text" class="form-control" id="u_limit" placeholder="u_limit"
-                      name="u_limit" required>
+            <% } else{ %>
+              <div class="d-flex justify-content-lg-center pt-2">
+                <button type="button" class="btn btn-primary w-50" onclick="document.getElementById('postBidForm').submit()">Post Bid</button>
+              </div>
+              <p></p>
+              <form action="" method="" id="">
+                <h5>Set Upper Limit</h5>
+                <div class="form-floating mb-1">
+                  <input type="text" class="form-control" id="u_limit" placeholder="u_limit" name="u_limit" required>
                   <label for="floatingEmail">Upper Limit</label>
-              </div>
-              <div class="d-flex justify-content-lg-center pt-3">
-                  <button type="button" class="btn btn-primary w-50" >Set Auto Bid</button>
-              </div>
-          </form>
-          <% } %>
-          </div>
+                </div>
+                <div class="d-flex justify-content-lg-center pt-3">
+                  <button type="button" class="btn btn-primary w-50">Set Auto Bid</button>
+                </div>
+              </form>
+              <% } %>
+        </div>
       </div>
       <div class="col">
         <div class="container_carousel pt-1 mt-5">

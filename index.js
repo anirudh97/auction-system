@@ -3,6 +3,7 @@ const path = require('path');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 
+var bidsRouter = require('./routes/bids.route');
 var usersRouter = require('./routes/users.route');
 var itemsRouter = require('./routes/items.route');
 var auctionsRouter = require('./routes/auctions.route');
@@ -25,6 +26,7 @@ app.use("/", usersRouter);
 app.use("/items", itemsRouter);
 app.use("/auctions", auctionsRouter);
 app.use("/watchlist", watchlistRouter);
+app.use("/bids", bidsRouter);
 
 app.use(express.static(__dirname + "/public"));
 
