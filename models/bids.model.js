@@ -5,7 +5,7 @@ const Bid = function(bid){
     this.auctionId = bid.auctionId;
     this.bidTimestamp = bid.bidTimestamp;
     this.amount = bid.amount;
-}
+};
 
 Bid.postBid = (bid, result) => {
     console.log("Model: Bids: postBid: Invoked !");
@@ -21,7 +21,7 @@ Bid.postBid = (bid, result) => {
             result(null, { "message": "inserted new bid details", "data": res.insertId });
         }
     });
-}
+};
 
 Bid.createAutoBid = (bid, result) => {
     console.log("Model: Bids: createAutoBid: Invoked !");
@@ -37,7 +37,7 @@ Bid.createAutoBid = (bid, result) => {
             result(null, { "message": "inserted new auto bid details", "data": res.insertId });
         }
     });
-}
+};
 
 function executeQuery(d){
     return new Promise (function(resolve, reject){
@@ -51,7 +51,7 @@ function executeQuery(d){
             };
         });
     })
-}
+};
 
 async function getMatches(resGetAutoBids){
     var matchAutoBid = []
@@ -62,7 +62,7 @@ async function getMatches(resGetAutoBids){
     matchAutoBid = await Promise.all(promises);
 
     return matchAutoBid;
-}
+};
 
 Bid.checkUpperLimit = (email, result) => {
     console.log("Model: Bids: checkUpperLimit: Invoked !");
@@ -85,7 +85,7 @@ Bid.checkUpperLimit = (email, result) => {
             })
         }
     })
-}
+};
 
 Bid.postAutoBid = (email, result) => {
     console.log("Model: Bids: postAutoBid: Invoked !");
@@ -102,5 +102,6 @@ Bid.postAutoBid = (email, result) => {
             result(null,res);
         };
     });
-}
+};
+
 module.exports = Bid;

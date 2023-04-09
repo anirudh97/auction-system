@@ -11,6 +11,59 @@ const Auction = function(auction){
     this.email = auction.email;
 }
 
+Auction.updateAuctions = (email, result) => {
+    console.log("Model: Auctions: updateAuctions: Invoked !");
+    var datetime = new Date();
+    currentDate = datetime.toISOString().slice(0,10);
+
+    email = "ysk33@gmail.com";
+    sqlQueryExpiredAuctions = "select DISTINCT(auction_id), bid.bid_timestamp, amount, minimum_price, bid.email AS bid_email, auction.email AS auction_email FROM auction JOIN bid USING(auction_id) WHERE closing_date = " + sql.escape(currentDate) + " ORDER BY bid_timestamp;";
+    console.log(sqlQueryExpiredAuctions);
+    sql.query(sqlQueryExpiredAuctions, (errExpiredAuctions, resExpiredAuctions) => {
+        if (errExpiredAuctions){
+            console.log("Model: Auctions: updateAuctions: Error in getting expired auctions !");
+            result({ "message": errExpiredAuctions }, null);
+			return;
+        } else{
+            if (resExpiredAuctions.length > 0){
+                var updateAuctionData = []
+                var winner = "";
+                var finalPrice = 0;
+                console.log(resExpiredAuctions);
+                for (var i = 0; i < resExpiredAuctions.length; i++){
+                    if (resExpiredAuctions[i].amount >= resExpiredAuctions[i].minimum_price && resExpiredAuctions[i].bid_email != email){
+                        winner = resExpiredAuctions[i].bid_email;
+                        finalPrice = resExpiredAuctions[i].amount;
+                    } else{
+                        winner = "NW";
+                    }
+                    updateAuctionData.push({
+                        "winner": winner,
+                        "finalPrice": finalPrice,
+                        "auctionId": resExpiredAuctions[i].auction_id
+                    });
+                }
+
+                console.log(updateAuctionData);
+                for (var j = 0; j < updateAuctionData; j++){
+                    sqlQuery = "UPDATE auction SET winner = ?, final_price = ? WHERE auction_id = ?";
+                    sql.query(sqlQuery, [updateAuctionData[j].winner, updateAuctionData[j].finalPrice, updateAuctionData[j].auctionId], (err, res) => {
+                        if (err){
+                            console.log("Model: Auctions: updateAuctions: Error in updating auctions !");
+                            result({ "message": err }, null);
+                            return;
+                        }
+                    })
+                }
+                console.log("Model: Auctions: updateAuctions: Updated auctions !");
+                result(null, {"message": "Updated Auctions"});
+            } else {
+                result(null, []);
+            }
+        };
+    });
+
+};
 Auction.getMyAuctions = (email, result) => {
     console.log("Model: Auctions: getMyAuctions: Invoked !");
     sqlQueryCreatedAuction = "SELECT category, type, brand, auction_id FROM item JOIN auction USING(item_id) WHERE email = " + sql.escape(email);

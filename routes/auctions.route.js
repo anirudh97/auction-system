@@ -32,6 +32,8 @@ router.get('/myAuctions', auctions.getMyAuctions);
 
 router.get('/:auctionId', auctions.getAuction);
 
+router.put('/updateAuctions', auctions.updateAuctions);
+
 
 
 

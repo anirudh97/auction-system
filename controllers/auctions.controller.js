@@ -5,6 +5,19 @@ const path = require('path');
 const Auction = require('../models/auctions.model.js');
 const Items = require('../models/items.model.js');
 
+exports.updateAuctions = (req, res) => {
+    Auction.updateAuctions(req.session.user, (err, data) => {
+        if (err){
+            res.status(500).send({
+                message:
+                    err.message || "Controller: Auctions: updateAuctions: Some error occured"
+            });
+        }
+        else {
+            res.send(data);
+        };
+    });
+};
 exports.getMyAuctions = (req, res) => {
     if (req.session.loggedIn != true){
         res.redirect("/");
