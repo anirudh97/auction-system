@@ -20,7 +20,7 @@ Auction.getMyAuctions = (email, result) => {
 			result({ "message": errCreatedAuction }, null);
 			return;
 		}
-        sqlQueryBidAuction = "SELECT category, type, brand, auction_id FROM item JOIN auction USING(item_id) JOIN bid USING(auction_id) Where auction.email = " + sql.escape(email);
+        sqlQueryBidAuction = "SELECT DISTINCT(auction_id), category, type, brand FROM item JOIN auction USING(item_id) JOIN bid USING(auction_id) Where bid.email = " + sql.escape(email);
         sql.query(sqlQueryBidAuction, (errBidAuction, resBidAuction) => {
             if (errBidAuction) {
                 console.log("Model: Auction: getMyAuctions: Error in getting My Auctions: ", errBidAuction);
@@ -32,17 +32,32 @@ Auction.getMyAuctions = (email, result) => {
 	});
 
 }
-Auction.getAuction = (auctionId, result) => {
+Auction.getAuction = (auctionId, email, result) => {
     console.log("Model: Auctions: getAuction: Invoked !");
-    sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)), bid_auction AS( select amount, auction_id FROM bid WHERE auction_id = " +  sql.escape(auctionId)+ " ORDER BY bid_timestamp DESC LIMIT 1) select auction_id, closing_date, bid_increment, auction.item_id, category, brand, type, color, model, imagePath, imageId, amount, auction.email FROM auction JOIN item_images USING(item_id) JOIN bid_auction USING(auction_id) WHERE auction.auction_id = " + sql.escape(auctionId);
+    sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)), bid_auction AS( select amount, auction_id FROM bid WHERE auction_id = " +  sql.escape(auctionId)+ " ORDER BY bid_timestamp DESC LIMIT 1) select auction_id, closing_date, bid_increment, auction.item_id, category, brand, type, color, model, imagePath, imageId, amount, auction.email, auction.winner, auction.final_price FROM auction JOIN item_images USING(item_id) JOIN bid_auction USING(auction_id) WHERE auction.auction_id = " + sql.escape(auctionId);
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("Model: Auction: getAuction: Error in getting Auction: ", err);
 			result({ "message": err }, null);
 			return;
-		}
-		result(null, res)
-
+		} else{
+            sqlQueryAutoBid = "SELECT * FROM auto_bid WHERE auction_id = " + sql.escape(auctionId) + " AND email = " + sql.escape(email);
+            sql.query(sqlQueryAutoBid, (errAutoBid, resAutoBid) => {
+                if(errAutoBid){
+                    console.log("Model: Auction: getAuction: Error in getting Auto bid: ", err);
+                    result({ "message": err }, null);
+                    return;
+                }
+                else{
+                    if (resAutoBid.length > 0){
+                        result(null, {"auctionDetails": res, "isAutoBid": true});
+                    }else{
+                        result(null, {"auctionDetails": res, "isAutoBid": false});
+                    };
+                   
+                };  
+            })
+        };
 	});
 }
 Auction.getAuctions = (isWinner, email,result) => {

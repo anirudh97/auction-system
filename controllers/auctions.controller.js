@@ -34,6 +34,7 @@ exports.getMyAuctions = (req, res) => {
                 }
             }
             allData["bidAuction"] = bidAuction;
+            allData["user"] = req.session.user;
 
             res.render('pages/myAuctions', { "status": 200, "message": "Successfully retreived my auctions", "data": allData})
         });
@@ -45,7 +46,7 @@ exports.getAuction = (req, res) => {
         res.redirect("/");
     }
     else{
-        Auction.getAuction(req.params.auctionId, (err, data) => {
+        Auction.getAuction(req.params.auctionId, req.session.user, (err, data) => {
             if (err)
                 res.status(500).send({
                     message:
@@ -54,43 +55,43 @@ exports.getAuction = (req, res) => {
             else
                 console.log("Controller: Auctions: getAuction: Fetched Auction");
             
-            if(data != null){
+            if(data.auctionDetails != null){
                 auctions = {};
                 already_seen_items = new Set();
                 item_images = {};
-                for (let i = 0; i < data.length; i++) {
-                    imagePathClean = data[i].imagePath.split('public')[1];
-                    if (data[i].item_id in item_images) {
-                        item_images[data[i].item_id].push(imagePathClean)
+                for (let i = 0; i < data.auctionDetails.length; i++) {
+                    imagePathClean = data.auctionDetails[i].imagePath.split('public')[1];
+                    if (data.auctionDetails[i].item_id in item_images) {
+                        item_images[data.auctionDetails[i].item_id].push(imagePathClean)
                     } else {
-                        item_images[data[i].item_id] = [imagePathClean]
+                        item_images[data.auctionDetails[i].item_id] = [imagePathClean]
                     };
                 };
-                for (let i = 0; i < data.length; i++) {
-                    if (already_seen_items.has(data[i].item_id)) {
+                for (let i = 0; i < data.auctionDetails.length; i++) {
+                    if (already_seen_items.has(data.auctionDetails[i].item_id)) {
                         continue
                     } else {
                         auctions = {
-                            "auctionId": data[i].auction_id,
-                            "closingDate": data[i].closing_date,
-                            "itemId": data[i].item_id,
-                            "imagePaths": item_images[data[i].item_id],
-                            "brand": data[i].brand,
-                            "category": data[i].category,
-                            "type": data[i].type,
-                            "color": data[i].color,
-                            "model": data[i].model,
-                            "bidIncrement": data[i].bid_increment,
-                            "amount": data[i].amount,
-                            "email": data[i].email,
-                            "loggedUser": req.session.user
+                            "auctionId": data.auctionDetails[i].auction_id,
+                            "closingDate": data.auctionDetails[i].closing_date,
+                            "itemId": data.auctionDetails[i].item_id,
+                            "imagePaths": item_images[data.auctionDetails[i].item_id],
+                            "brand": data.auctionDetails[i].brand,
+                            "category": data.auctionDetails[i].category,
+                            "type": data.auctionDetails[i].type,
+                            "color": data.auctionDetails[i].color,
+                            "model": data.auctionDetails[i].model,
+                            "bidIncrement": data.auctionDetails[i].bid_increment,
+                            "amount": data.auctionDetails[i].amount,
+                            "email": data.auctionDetails[i].email,
+                            "isAutoBid": data.isAutoBid,
+                            "user": req.session.user,
+                            "winner": data.auctionDetails[i].winner
                         };
         
-                        already_seen_items.add(data[i].item_id);
+                        already_seen_items.add(data.auctionDetails[i].item_id);
                     };
                 };
-
-                console.log(auctions);
                 res.render('pages/itemPage', { "status": 200, "message": "Successfully retreived auction", "data": auctions})
             }
             else {

@@ -11,7 +11,7 @@ router.get('/new', (req, res) => {
         res.redirect('/');
     }
     else{
-        res.render('pages/createAuction');
+        res.render('pages/createAuction', {"data": {"user": req.session.user}});
     };
 })
 

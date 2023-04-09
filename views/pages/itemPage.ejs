@@ -67,23 +67,38 @@
           </form>
         </table>
         <div class="mt-2 ">
-          <% if(data.email==data.loggedUser){ %>
+          <% if(data.email==data.user){ %>
             <h5>You created the Auction. Cannot bid.</h5>
             <% } else{ %>
-              <div class="d-flex justify-content-lg-center pt-2">
-                <button type="button" class="btn btn-primary w-50" onclick="document.getElementById('postBidForm').submit()">Post Bid</button>
-              </div>
-              <p></p>
-              <form action="" method="" id="">
-                <h5>Set Upper Limit</h5>
-                <div class="form-floating mb-1">
-                  <input type="text" class="form-control" id="u_limit" placeholder="u_limit" name="u_limit" required>
-                  <label for="floatingEmail">Upper Limit</label>
+
+              <% if(data.winner == "NA"){ %>
+                <div class="d-flex justify-content-lg-center pt-2">
+                  <button type="button" class="btn btn-primary w-50" onclick="document.getElementById('postBidForm').submit()">Post Bid</button>
                 </div>
-                <div class="d-flex justify-content-lg-center pt-3">
-                  <button type="button" class="btn btn-primary w-50">Set Auto Bid</button>
-                </div>
-              </form>
+                <p></p>
+                <% if(data.isAutoBid==false){ %>
+                  <form action="/bids/createAutoBid/<%=data.auctionId%>" method="POST">
+                    <h5>Set Upper Limit</h5>
+                    <div class="form-floating mb-1">
+                      Bid Increment: $<input type="text" class="" name= "bidIncrement" value="<%= data.bidIncrement %>" readonly>
+                    </div>
+                    <div class="form-floating mb-1">
+                      <input type="text" class="form-control" placeholder="u_limit" name="upperLimit" required>
+                      <label for="floatingEmail">Upper Limit</label>
+                    </div>
+                    <div class="d-flex justify-content-lg-center pt-3">
+                      <button type="submit" class="btn btn-primary w-50">Set Auto Bid</button>
+                    </div>
+                  </form>
+                  <% } else{ %>
+                    <h5>Auto bid enabled for this auction.</h5>
+                  <% } %>  
+                <% } else if(data.winner == data.user){ %>
+                    <h5>You are the winner of this auction.</h5>
+                  <% }else{ %>
+                    <h5>Auction is over.</h5>
+                    <% } %> 
+
               <% } %>
         </div>
       </div>

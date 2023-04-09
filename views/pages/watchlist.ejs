@@ -49,12 +49,12 @@
               </tr>
             </thead>
             <tbody>
-              <% for(var i=0; i<data.length; i++) {%>
+              <% for(var i=0; i<data.data.length; i++) {%>
                 <tr>
                   <th scope="row"><%= i+1 %></th>
-                  <td><%= data[i].category %></td>
-                  <td><%= data[i].brand %></td>
-                  <td><%= data[i].color %></td>
+                  <td><%= data.data[i].category %></td>
+                  <td><%= data.data[i].brand %></td>
+                  <td><%= data.data[i].color %></td>
                 </tr>
               <% } %>
             </tbody>
