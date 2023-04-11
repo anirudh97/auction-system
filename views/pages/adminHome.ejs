@@ -1,2 +1,58 @@
 <!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<header>
+    <%- include('../partials/adminHeader'); %>
+</header>
+<body>
+    <div class="d-flex justify-content-center pt-5 mt-5">
+        <p class="fs-3">Add a Customer Representative Account</p>
+    </div>
+    <div class="d-flex justify-content-lg-center">
+        <div class="w-25">
+            <form action="/signup" method="POST" id="signupForm">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingEmail" placeholder="test@example.com"
+                        name="email" required>
+                    <label for="floatingEmail">Email Address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                        name="password" required>
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPasswordRetype"
+                        placeholder="Retype Password" name="retypePassword" required>
+                    <label for="floatingPassword">Retype Password</label>
+                </div>
+                <div class="d-flex justify-content-lg-center">
+                    <button type="button" class="btn btn-primary w-100" onclick="validateSignup()">Create
+                        Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container pt-4 mt-4">
+        <center><h3>Generate Statistic Report</h3><p></p></center>
+        <div class="btn-group dropdown">
+            <button type="button" class="btn dropdown-toggle btn-primary w-100" data-bs-toggle="dropdown" aria-expanded="false">
+              Select Statistic Report 
+            </button>
+            <ul class="dropdown-menu">
+                <li><form method="GET" action="/categoryWiseSales" class="dropdown-item" id="categoryWiseSales">Category-wise Sales</form></li>
+                <li><form method="GET" action="/userEarnings" class="dropdown-item" id="userEarnings">User Earnings</form></li> 
+                <li><form method="GET" action="/siteWideTotalSales" class="dropdown-item" id="siteWideTotalSales">Site-wide Total Sales</form></li>
+                <li><form method="GET" action="/bestSellingItems" class="dropdown-item" id="bestSellingItems">Best Selling Items</form></li> <!-- #,item:Model,Current price (Display Top 5) -->
+                <li><form method="GET" action="/userMostEarnings" class="dropdown-item" id="userMostEarnings">User with most Earnings</form></li>                                         
+                <li><form method="GET" action="/userMostSpending" class="dropdown-item" id="userMostSpending">User with most Spending</form></li>                                         
+            </ul>
+          </div>
+    </div>
+
+</body>
 </html>
