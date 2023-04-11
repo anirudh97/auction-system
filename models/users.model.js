@@ -8,6 +8,19 @@ const User = function (user) {
 	this.type = user.type;
 }
 
+User.deleteUser = (email, result) => {
+	console.log("Model: User: deleteUser: Invoked !");
+
+	sqlQuery = "DELETE FROM end_user WHERE email = " + sql.escape(email);
+	sql.query(sqlQuery, (err, res) => {
+		if(err){
+			console.log("Model: User: deleteUser: Error !: ", err)
+			result({ "message": err });
+		} else{
+			result(null, res);
+		}
+	});
+};
 User.create = (newUser, result) => {
 	console.log("Model: User: create: Invoked !");
 

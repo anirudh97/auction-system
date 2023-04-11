@@ -3,6 +3,7 @@ const path = require('path');
 const router = express.Router();
 const users = require("../controllers/users.controller.js");
 
+router.post('/deleteUser', users.deleteUser)
 router.post('/signup', users.create)
 router.post('/signin', users.signin)
 
