@@ -43,7 +43,7 @@ Auction.updateAuctions = (email, result) => {
     currentDate = datetime.toISOString().slice(0,10);
 
     email = "ysk33@gmail.com";
-    sqlQueryExpiredAuctions = "With cte as (Select auction_id, bid.amount,bid_timestamp, minimum_price, bid.email AS bid_email, auction.email AS auction_email, dense_rank() OVER ( partition by AUCTION_ID order by bid_timestamp desc ) AS RNK From auction Join bid USING(auction_id) Where closing_date = '2023-04-09')  Select * From cte Where rnk = 1;"
+    sqlQueryExpiredAuctions = "With cte as (Select auction_id, bid.amount,bid_timestamp, minimum_price, bid.email AS bid_email, auction.email AS auction_email, dense_rank() OVER ( partition by AUCTION_ID order by bid_timestamp desc ) AS RNK From auction Join bid USING(auction_id) Where closing_date = " + sql.escape(currentDate) + ")  Select * From cte Where rnk = 1;"
     console.log(sqlQueryExpiredAuctions);
     sql.query(sqlQueryExpiredAuctions, (errExpiredAuctions, resExpiredAuctions) => {
         if (errExpiredAuctions){

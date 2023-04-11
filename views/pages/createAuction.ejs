@@ -3,6 +3,18 @@
 
 <head>
     <%- include('../partials/head'); %>
+    <script>
+        $(document).ready(function () {
+            $.get("/category", function(data, status) {
+            var options = "<option selected>Choose Category</option>";
+            $.each(data, function(i) {
+                var categoryOption = '<option value="' + data[i].name + '" id = "category" ' + data[i].category_id + '>' + data[i].name + '</option>'
+                options += categoryOption;
+            });
+            $('#category').append(options);
+            });
+        });
+    </script>
 </head>
 
 <header>
@@ -14,12 +26,8 @@
         <div class="w-25">
             <form action="/auctions/new" method="POST" id="createAuctionForm" enctype="multipart/form-data">
                 <div class="d-flex justify-content-lg-center mt-5 mb-3">
-                    <select class="form-select" aria-label="Default select example" name="category">
-                        <option selected>Item Category</option>
-                        <option value="cap">Cap</option>
-                        <option value="sunglasses">Sunglasses</option>
-                        <option value="wristwatch">Wristwatch</option>
-                      </select>
+                    <select class="form-select" aria-label="Default select example" name="category" id="category">
+                    </select>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingBrand" placeholder="Brand" name="brand">

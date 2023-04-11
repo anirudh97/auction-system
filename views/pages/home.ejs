@@ -5,6 +5,14 @@
   <%- include('../partials/head'); %>
     <script>
       $(document).ready(function () {
+        $.get("/category", function(data, status) {
+          var options = "<option selected>Choose Category</option>";
+          $.each(data, function(i) {
+            var categoryOption = '<option value="' + data[i].name + '" id = "category" ' + data[i].category_id + '>' + data[i].name + '</option>'
+            options += categoryOption;
+          });
+          $('#category').append(options);
+        });
         $.get("/auctions?isWinner=false", function (data, status) {
           if(data.length == 0){
             $('#noAuction').append('<p class="fs-4">No Auctions to display</p>');
@@ -73,11 +81,7 @@
 <% } %>
   <div class="d-flex justify-content-lg-center pt-5 mt-5">
     <div class="input-group w-75">
-      <select class="form-select">
-        <option selected>Choose Category</option>
-        <option value="Category1">Category1</option>
-        <option value="Category2">Category2</option>
-        <option value="Category3">Category3</option>
+      <select class="form-select" id="category">
       </select>
       <input type="text" class="form-control w-50" placeholder="Search....." />
       <button type="submit" class="btn btn-primary">Search</button>

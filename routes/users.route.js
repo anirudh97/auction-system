@@ -39,7 +39,11 @@ router.get('/custRepHome', (req, res) => {
 router.get('/adminHome', (req, res) => {
 	if (req.session.loggedIn != true){
         res.redirect("/");
-    }
+    } else if (req.session.alertData){
+		data = {data: {"user": req.session.user, "alertData": req.session.alertData}};
+		delete req.session.alertData;
+		res.render('pages/adminHome', data);
+	}
 	else{
 		data = {data: {"user": req.session.user}};
 		res.render('pages/adminHome', data);

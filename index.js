@@ -4,8 +4,10 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 
 var bidsRouter = require('./routes/bids.route');
+var adminRouter = require('./routes/admin.route');
 var usersRouter = require('./routes/users.route');
 var itemsRouter = require('./routes/items.route');
+var categoryRouter = require('./routes/category.route');
 var auctionsRouter = require('./routes/auctions.route');
 var watchlistRouter = require('./routes/watchlist.route');
 var questionsRouter = require('./routes/questions.route');
@@ -25,7 +27,9 @@ app.get("/", (req, res) => {
 
 app.use("/", usersRouter);
 app.use("/bids", bidsRouter);
+app.use("/admin", adminRouter);
 app.use("/items", itemsRouter);
+app.use("/category", categoryRouter);
 app.use("/auctions", auctionsRouter);
 app.use("/watchlist", watchlistRouter);
 app.use("/questions", questionsRouter);
