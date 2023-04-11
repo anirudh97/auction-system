@@ -56,21 +56,40 @@ exports.myQuestions = (req, res) => {
                     message:
                         err.message || "Controller: Questions: myQuestions: Some error occured"
                 });
-            else
+            else{
                 console.log("Controller: Questions: myQuestions: Fetched My Questions");
                 questionIds = new Set();
-                answers = {}
+                answers = {};
+                questions = [];
                 for (let i = 0; i < data.length; i++) {
-                    if (data[i].question_id in answers) {
-                        answers[data[i].question_id].push(data[i].answer_text)
-                    } else {
-                        item_images[data[i].itemId] = [data[i].imagePath]
+                    if(data[i].answer_text == null){
+                        answers[data[i].question_id] = []
+                    }
+                    else{
+                        if (data[i].question_id in answers) {
+                            answers[data[i].question_id].push(data[i].answer_text);
+                        } else {
+                            answers[data[i].question_id] = [data[i].answer_text];
+                        };
                     };
                 };
-                res.render('pages/helpRequest', { "status": 200, "data": data});
-        });
 
-        res.render('pages/helpRequest'); 
+                for (let i = 0; i < data.length; i++) {
+                    if (questionIds.has(data[i].question_id)) {
+                        continue
+                    } else {
+                        questions.push({
+                            "questionId": data[i].question_id,
+                            "questionText": data[i].question_text,
+                            "answers": answers[data[i].question_id]
+                        });
+        
+                        questionIds.add(data[i].question_id);
+                    };
+                };
+                res.render('pages/helpRequest', { "status": 200, "data": questions});
+            };
+        });
     };
 };
 
@@ -85,10 +104,39 @@ exports.allQuestions = (req, res) => {
                     message:
                         err.message || "Controller: Questions: allQuestions: Some error occured"
                 });
-            else
+            else{
                 console.log("Controller: Questions: allQuestions: Fetched All Questions");
-                console.log(data);
-                res.render('pages/customerRepInbox', { "status": 200, "data": data});
+                questionIds = new Set();
+                answers = {};
+                questions = [];
+                for (let i = 0; i < data.length; i++) {
+                    if(data[i].answer_text == null){
+                        answers[data[i].question_id] = []
+                    }
+                    else{
+                        if (data[i].question_id in answers) {
+                            answers[data[i].question_id].push(data[i].answer_text);
+                        } else {
+                            answers[data[i].question_id] = [data[i].answer_text];
+                        };
+                    };
+                };
+
+                for (let i = 0; i < data.length; i++) {
+                    if (questionIds.has(data[i].question_id)) {
+                        continue
+                    } else {
+                        questions.push({
+                            "questionId": data[i].question_id,
+                            "questionText": data[i].question_text,
+                            "answers": answers[data[i].question_id]
+                        });
+        
+                        questionIds.add(data[i].question_id);
+                    };
+                };
+                res.send({"status": 200, "data": questions});
+            };
         });
     };
 };

@@ -34,7 +34,7 @@ Question.postAnswer = (answer, result) => {
 
 Question.myQuestions = (email, result) => {
     console.log("Model: myQuestions: Invoked!");
-    sqlQuery = "SELECT * from question JOIN answer USING(question_id) where question.email = " + sql.escape(email);
+    sqlQuery = "SELECT * FROM question LEFT JOIN answer USING(question_id) WHERE question.email = " + sql.escape(email);
     sql.query(sqlQuery, (err, res) => {
         if (err) {
             console.log("Model: Question: myQuestions: Some Error occured: ", err)
@@ -47,7 +47,7 @@ Question.myQuestions = (email, result) => {
 
 Question.allQuestions = (result) => {
     console.log("Model: allQuestions: Invoked!");
-    sqlQuery = "select question_id, question.email as user_email, question_text, answer_id, answer_text, answer.email as cust_rep_email from question join answer using(question_id);"
+    sqlQuery = "SELECT question_id, question.email AS user_email, question_text, answer_id, answer_text, answer.email AS cust_rep_email FROM question LEFT JOIN answer USING(question_id);"
     sql.query(sqlQuery, (err, res) => {
         if (err) {
             console.log("Model: Question: allQuestions: Some Error occured: ", err)
