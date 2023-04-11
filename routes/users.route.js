@@ -25,6 +25,26 @@ router.get('/home', (req, res) => {
 	};
 })
 
+router.get('/custRepHome', (req, res) => {
+	if (req.session.loggedIn != true){
+        res.redirect("/");
+    }
+	else{
+		data = {data: {"user": req.session.user}};
+		res.render('pages/custRepHome', data);
+	};
+})
+
+router.get('/adminHome', (req, res) => {
+	if (req.session.loggedIn != true){
+        res.redirect("/");
+    }
+	else{
+		data = {data: {"user": req.session.user}};
+		res.render('pages/adminHome', data);
+	};
+})
+
 router.get('/logout', (req, res) => {
 	req.session.destroy();
 	res.redirect('/');

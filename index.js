@@ -8,6 +8,7 @@ var usersRouter = require('./routes/users.route');
 var itemsRouter = require('./routes/items.route');
 var auctionsRouter = require('./routes/auctions.route');
 var watchlistRouter = require('./routes/watchlist.route');
+var questionsRouter = require('./routes/questions.route');
 
 const app = express();
 const port = 3000;
@@ -23,10 +24,12 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", usersRouter);
+app.use("/bids", bidsRouter);
 app.use("/items", itemsRouter);
 app.use("/auctions", auctionsRouter);
 app.use("/watchlist", watchlistRouter);
-app.use("/bids", bidsRouter);
+app.use("/questions", questionsRouter);
+
 
 app.use(express.static(__dirname + "/public"));
 

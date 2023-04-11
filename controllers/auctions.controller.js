@@ -18,6 +18,7 @@ exports.updateAuctions = (req, res) => {
         };
     });
 };
+
 exports.getMyAuctions = (req, res) => {
     if (req.session.loggedIn != true){
         res.redirect("/");

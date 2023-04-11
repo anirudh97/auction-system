@@ -55,8 +55,16 @@ exports.signin = (req, res) => {
 			console.log("Controller: User: create: Sigin Successful!")
 			req.session.loggedIn = true
 			req.session.user = data.user
-			console.log(req.session)
-			res.redirect('/home')
+			
+			if (type == "admin"){
+				res.redirect('/adminHome');
+			}
+			else if(type == "custRep"){
+				res.redirect('/custRepHome');
+			}
+			else{
+				res.redirect('/home');
+			};
 		}
 	});
 

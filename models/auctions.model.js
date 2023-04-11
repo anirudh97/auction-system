@@ -11,13 +11,39 @@ const Auction = function(auction){
     this.email = auction.email;
 }
 
+
+function executeQuery(d){
+    return new Promise (function(resolve, reject){
+        sqlQuery = "UPDATE auction SET winner = " + sql.escape(d.winner) + " ,final_price = " +  sql.escape(d.finalPrice) + " WHERE auction_id = " + sql.escape(d.auctionId);
+        sql.query(sqlQuery, (err, res) => {
+            if (err) {
+                return reject(err);
+            }
+            else{
+                resolve(res);
+            };
+        });
+    })
+};
+
+async function updateAuctionsTable(updateAuctionData){
+    var updateAuctions = []
+    const promises = []
+    for(var i = 0; i < updateAuctionData.length; i++){
+        promises.push(executeQuery(updateAuctionData[i]));
+    }
+    updateAuctions = await Promise.all(promises);
+
+    return updateAuctions;
+};
+
 Auction.updateAuctions = (email, result) => {
     console.log("Model: Auctions: updateAuctions: Invoked !");
     var datetime = new Date();
     currentDate = datetime.toISOString().slice(0,10);
 
     email = "ysk33@gmail.com";
-    sqlQueryExpiredAuctions = "select DISTINCT(auction_id), bid.bid_timestamp, amount, minimum_price, bid.email AS bid_email, auction.email AS auction_email FROM auction JOIN bid USING(auction_id) WHERE closing_date = " + sql.escape(currentDate) + " ORDER BY bid_timestamp;";
+    sqlQueryExpiredAuctions = "With cte as (Select auction_id, bid.amount,bid_timestamp, minimum_price, bid.email AS bid_email, auction.email AS auction_email, dense_rank() OVER ( partition by AUCTION_ID order by bid_timestamp desc ) AS RNK From auction Join bid USING(auction_id) Where closing_date = '2023-04-09')  Select * From cte Where rnk = 1;"
     console.log(sqlQueryExpiredAuctions);
     sql.query(sqlQueryExpiredAuctions, (errExpiredAuctions, resExpiredAuctions) => {
         if (errExpiredAuctions){
@@ -29,9 +55,9 @@ Auction.updateAuctions = (email, result) => {
                 var updateAuctionData = []
                 var winner = "";
                 var finalPrice = 0;
-                console.log(resExpiredAuctions);
+
                 for (var i = 0; i < resExpiredAuctions.length; i++){
-                    if (resExpiredAuctions[i].amount >= resExpiredAuctions[i].minimum_price && resExpiredAuctions[i].bid_email != email){
+                    if (resExpiredAuctions[i].amount >= resExpiredAuctions[i].minimum_price && resExpiredAuctions[i].auction_email != resExpiredAuctions[i].bid_email){
                         winner = resExpiredAuctions[i].bid_email;
                         finalPrice = resExpiredAuctions[i].amount;
                     } else{
@@ -44,19 +70,15 @@ Auction.updateAuctions = (email, result) => {
                     });
                 }
 
-                console.log(updateAuctionData);
-                for (var j = 0; j < updateAuctionData; j++){
-                    sqlQuery = "UPDATE auction SET winner = ?, final_price = ? WHERE auction_id = ?";
-                    sql.query(sqlQuery, [updateAuctionData[j].winner, updateAuctionData[j].finalPrice, updateAuctionData[j].auctionId], (err, res) => {
-                        if (err){
-                            console.log("Model: Auctions: updateAuctions: Error in updating auctions !");
-                            result({ "message": err }, null);
-                            return;
-                        }
-                    })
-                }
-                console.log("Model: Auctions: updateAuctions: Updated auctions !");
-                result(null, {"message": "Updated Auctions"});
+                updateAuctionsTable(updateAuctionData).then((updateAuctions) => {
+                    console.log("Model: Auctions: updateAuctions: Updated auctions !");
+                    result(null, {"message": "Updated Auctions"});
+                })
+                .catch((err) => {
+                    console.log("Model: Auctions: updateAuctions: some error occured: !", err);
+                    result({ "message": err }, null);
+                    return;
+                })
             } else {
                 result(null, []);
             }

@@ -43,7 +43,7 @@ User.create = (newUser, result) => {
 						result({ "message": err }, null);
 					};
 					// console.log("Model: User: create: User Added: ", {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type});
-					result(null, { id: res.insertId, "user": newUser.email, "type": newUser.type })
+					result(null, { id: res.insertId, "user": newUser.email, "type": newUser.type });
 				});
 			});
 		};
