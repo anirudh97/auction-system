@@ -7,14 +7,16 @@ exports.getWatchlist = (req, res) => {
     }
     else{
         Watchlist.getWatchlist(req.session.user, (err, data) => {
-            if (err)
+            if (err){
                 res.status(500).send({
                     message:
                         err.message || "Controller: Watchlist: getWatchlist: Some error occured"
                 });
-            else
+            }
+            else{
                 console.log("Controller: Watchlist: getWatchlist: Fetched watchlist");
-            res.render('pages/watchlist', { "status": 200, "message": "Successfully retreived watchlist", "data": {"data": data, "user": req.session.user }});
+                res.render('pages/watchlist', { "status": 200, "message": "Successfully retreived watchlist", "data": {"data": data, "user": req.session.user }});
+            };
         });
     }
 };

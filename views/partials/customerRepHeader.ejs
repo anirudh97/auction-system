@@ -3,23 +3,23 @@
         cursor: pointer;
     }
 
-    div:hover #createAuction {
+    div:hover #deleteIllegalAuction {
         cursor: pointer;
     }
-    div:hover #createMyAuctionForm {
+    div:hover #resetPasswordForm {
         cursor: pointer;
     }
-    div:hover #createWatchlistForm {
+    div:hover #deleteIllegalBidForm {
         cursor: pointer;
     }
-    div:hover #createHelpRequestsForm {
+    div:hover #answerQueriesForm{
         cursor: pointer;
     }
 </style>
 
 <nav class="navbar navbar-expand-lg bg-primary fixed-top">
     <div class="container-fluid">
-        <form action="/home" method="GET" id="homeForm">
+        <form action="/custRepHome" method="GET" id="homeForm">
             <div class="" id="logo" onclick="document.getElementById('homeForm').submit();">
                 <i class="fa-solid fa-cart-shopping fa-xl" style="color: #fff;"></i>
                 <span style="color: #fff;" class="fs-4">BuyMe</span>
@@ -35,7 +35,7 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/auctions/myAuctions" method="GET" id="resetPasswordForm">
+                    <form action="/customerRep/resetUser" method="GET" id="resetPasswordForm">
                         <div id="resetPassword" onclick="document.getElementById('resetPasswordForm').submit();">
                             <a class="nav-link" style="color: #fff;">Reset User Credentials</a>
                         </div>
@@ -49,7 +49,7 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/questions/myQuestions" method="GET" id="answerQueriesForm">
+                    <form action="/custRepHome" method="GET" id="answerQueriesForm">
                         <div id="answerQueries" onclick="document.getElementById('answerQueriesForm').submit();">
                             <a class="nav-link" style="color: #fff;">Answer Queries</a>
                         </div>
@@ -58,7 +58,9 @@
             </ul>
             <span>
                 <div class="btn-group">
-                    
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false"><%=user%>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <form action="/logout" method="GET" id="logoutForm">
@@ -69,13 +71,6 @@
                         </li>
                         <li>
                             <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <form action="/deleteUser" method="POST" id="deleteUserForm">
-                                <div id="createAuction" onclick="document.getElementById('deleteUserForm').submit();">
-                                    <a class="dropdown-item"><i class="fa-solid fa-trash" style="padding-right: 5px;"></i>Delete Account</a>
-                                </div>
-                            </form>
                         </li>
                     </ul>
                 </div>

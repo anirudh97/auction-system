@@ -58,13 +58,16 @@
     }
 
   </style>
-  <header><%- include('../partials/header'); %></header>
+  <header><%- include('../partials/customerRepHeader'); %></header>
   <body>
-    <div class="container pt-2 mt-5">
+    <div class="d-flex justify-content-end pt-5 mt-5">
+        <div class="fixed-right" id="liveAlertPlaceholder"></div>
+    </div>
+    <div class="container pt-2">
         <div class="container pt-2 mt-5">
             <h3 class="fs-3">Reset User Password</h3>
         <div class="w-50 p-5">
-            <form action="/signup" method="POST" id="signupForm">
+            <form action="/customerRep/resetUser" method="POST" id="signupForm">
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="floatingEmail" placeholder="test@example.com"
                         name="email" required>
@@ -81,14 +84,17 @@
                     <label for="floatingPassword">Retype Password</label>
                 </div>
             
-                    <button type="button" class="btn btn-primary w-100" onclick="validateSignup()">Create
-                        Account</button>
+                    <button type="button" class="btn btn-primary w-100" onclick="validateSignup()">Reset Password</button>
           
             </form>
         </div>
         </div>
         </div>
+        <div class="pt-2 px-5">
+            <h5>End Users Email</h5>
+            <% for(var i=0; i<data.length; i++) {%>
+                <p><%= i+1 %>. <%=data[i].email%></p>
+            <% } %>
+        </div>
   </body>
-
-  <footer><%- include('../partials/footer'); %></footer>
 </html>

@@ -8,6 +8,39 @@ const User = function (user) {
 	this.type = user.type;
 }
 
+User.resetUser = (newUser, result) => {
+	console.log("Model: User: resetUser: Invoked !");
+
+	sqlQuery = "UPDATE end_user SET password = ? WHERE email = ?";
+	bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
+		if (hashErr) {
+			console.log("Model: User: create: Error in hashing password !: ", hashErr)
+			result({ "message": hashErr }, null)
+		};
+
+		sql.query(sqlQuery, [hash, newUser.email], (err, res) => {
+			if (err) {
+				console.log("Model: User: resetUser: Error !: ", err)
+				result({ "message": err }, null);
+			};
+			result(null, { id: res.insertId, "user": newUser.email });
+		});
+	});
+
+};
+
+User.getUsers = (result) => {
+	console.log("Model: User: getUsers: Invoked !");
+	sqlQuery = "select email from end_user";
+	sql.query(sqlQuery, (err, res) => {
+		if(err){
+			console.log("Model: User: getUsers: Error !: ", err)
+			result({ "message": err });
+		} else{
+			result(null, res);
+		}
+	});
+}
 User.deleteUser = (email, result) => {
 	console.log("Model: User: deleteUser: Invoked !");
 

@@ -40,7 +40,8 @@ exports.postAnswer = (req, res) => {
 
         else {
             console.log("Controller: Question:  postAnswer: Answer posted Successfully!");
-            res.send({"status": 200, "data": "posted answer"});
+            req.session.alertData = {"message": "Posted answer!", "alertType": "success"};
+			res.redirect("/custRepHome");
         }
     });
 }
@@ -87,7 +88,7 @@ exports.myQuestions = (req, res) => {
                         questionIds.add(data[i].question_id);
                     };
                 };
-                res.render('pages/helpRequest', { "status": 200, "data": questions});
+                res.render('pages/helpRequest', { "status": 200, "data": {"questions": questions, "user": req.session.user}});
             };
         });
     };
@@ -135,7 +136,14 @@ exports.allQuestions = (req, res) => {
                         questionIds.add(data[i].question_id);
                     };
                 };
-                res.send({"status": 200, "data": questions});
+                if (req.session.alertData){
+                    allData = {"user": req.session.user, "questions": questions, data: {"user": req.session.user, "alertData": req.session.alertData}};
+                    delete req.session.alertData;
+                }else{
+                    allData = {"user": req.session.user, "questions": questions};
+                };
+                
+                res.render('pages/customerRepInbox', allData);
             };
         });
     };

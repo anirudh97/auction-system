@@ -1,4 +1,3 @@
-// const Admin = require('../models/admin.model.js');
 const User = require('../models/users.model.js');
 const Category = require('../models/category.model.js');
 

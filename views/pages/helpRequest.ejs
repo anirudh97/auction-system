@@ -23,16 +23,16 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <% for(var i=0; i<data.length; i++) {%>
+                          <% for(var i=0; i<data.questions.length; i++) {%>
                               <tr>
                                 <th scope="row"><%= i+1 %></th>
-                                <td><%= data[i].questionText %></td>
+                                <td><%= data.questions[i].questionText %></td>
                                 <td>
-                                  <% if(data[i].answers.length==0){ %>
+                                  <% if(data.questions[i].answers.length==0){ %>
                                         <b>Question has not been answered yet.</b>
                                     <% } else{ %>
-                                      <% for(var j=0; j<data[i].answers.length; j++) {%>
-                                        Answer <%= j+1 %>: <%= data[i].answers[j] %> <br>
+                                      <% for(var j=0; j<data.questions[i].answers.length; j++) {%>
+                                        Answer <%= j+1 %>: <%= data.questions[i].answers[j] %> <br>
                                       <% } %>
                                   <% } %>
                                 </td>
