@@ -28,39 +28,37 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item" style="margin-left: 25px;">
-                    <form action="/auctions/new" method="GET" id="createAuctionForm">
-                        <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
-                            <a class="nav-link" style="color: #fff;">Create New Auction</a>
+                    <form action="/auctions/new" method="GET" id="deleteIllegalAuction">
+                        <div id="deleteAuction" onclick="document.getElementById('deleteIllegalAuction').submit();">
+                            <a class="nav-link" style="color: #fff;">Delete Illegal Auction</a>
                         </div>
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/auctions/myAuctions" method="GET" id="createMyAuctionForm">
-                        <div id="myAuctions" onclick="document.getElementById('createMyAuctionForm').submit();">
-                            <a class="nav-link" style="color: #fff;">My Auctions</a>
+                    <form action="/auctions/myAuctions" method="GET" id="resetPasswordForm">
+                        <div id="resetPassword" onclick="document.getElementById('resetPasswordForm').submit();">
+                            <a class="nav-link" style="color: #fff;">Reset User Credentials</a>
                         </div>
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/watchlist" method="GET" id="createWatchlistForm">
-                        <div id="createWatchlist" onclick="document.getElementById('createWatchlistForm').submit();">
-                            <a class="nav-link" style="color: #fff;">My Watchlist</a>
+                    <form action="/watchlist" method="GET" id="deleteIllegalBidForm">
+                        <div id="deleteIllegalBid" onclick="document.getElementById('deleteIllegalBidForm').submit();">
+                            <a class="nav-link" style="color: #fff;">Delete Illegal Bid</a>
                         </div>
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/questions/myQuestions" method="GET" id="createHelpRequestsForm">
-                        <div id="createHelpRequests" onclick="document.getElementById('createHelpRequestsForm').submit();">
-                            <a class="nav-link" style="color: #fff;">My Help Requests</a>
+                    <form action="/questions/myQuestions" method="GET" id="answerQueriesForm">
+                        <div id="answerQueries" onclick="document.getElementById('answerQueriesForm').submit();">
+                            <a class="nav-link" style="color: #fff;">Answer Queries</a>
                         </div>
                     </form>
                 </li>
             </ul>
             <span>
                 <div class="btn-group">
-                    <!-- <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                        aria-expanded="false"><%=data.user%>
-                    </button> -->
+                    
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <form action="/logout" method="GET" id="logoutForm">
