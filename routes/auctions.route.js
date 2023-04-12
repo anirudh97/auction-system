@@ -30,13 +30,13 @@ router.post('/new', upload.array('multi-files'), auctions.create);
 
 router.get('/myAuctions', auctions.getMyAuctions);
 
-router.get('/:auctionId', auctions.getAuction);
+router.get('/allDetails', auctions.getDetails);
+
+router.get('/:auctionId(\\d+)', auctions.getAuction);
 
 router.post('/deleteBid/:auctionId/:bidId', auctions.deleteBid);
 
 router.post('/deleteAuction/:auctionId', auctions.deleteAuction);
-
-router.get('/allDetails', auctions.getDetails);
 
 router.put('/updateAuctions', auctions.updateAuctions);
 

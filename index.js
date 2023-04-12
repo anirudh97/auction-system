@@ -11,6 +11,7 @@ var categoryRouter = require('./routes/category.route');
 var auctionsRouter = require('./routes/auctions.route');
 var watchlistRouter = require('./routes/watchlist.route');
 var questionsRouter = require('./routes/questions.route');
+var customerRepRouter = require('./routes/customerRep.route');
 
 const app = express();
 const port = 3000;
@@ -33,6 +34,7 @@ app.use("/category", categoryRouter);
 app.use("/auctions", auctionsRouter);
 app.use("/watchlist", watchlistRouter);
 app.use("/questions", questionsRouter);
+app.use("/customerRep", customerRepRouter);
 
 
 app.use(express.static(__dirname + "/public"));

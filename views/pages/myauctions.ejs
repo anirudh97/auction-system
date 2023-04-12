@@ -47,7 +47,7 @@
         </thead>
         <tbody>
           <% for(var i=0; i<data.bidAuction.length; i++) {%>
-            <form method="GET" action="/<%= data.bidAuction[i].auction_id %>">
+            <form method="GET" action="/auctions/<%= data.bidAuction[i].auction_id %>">
               <tr>
                 <th scope="row"><%= i+1 %></th>
                 <td><%= data.bidAuction[i].category %> : <%= data.bidAuction[i].type %></td>

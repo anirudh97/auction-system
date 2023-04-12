@@ -9,7 +9,7 @@ const Auction = function(auction){
     this.winner = auction.winner;
     this.itemId = auction.itemId;
     this.email = auction.email;
-}
+};
 
 
 function executeQuery(d){
@@ -39,7 +39,7 @@ async function updateAuctionsTable(updateAuctionData){
 
 Auction.getDetails = (result) => {
     console.log("Model: Auctions: getDetails: Invoked !");
-    sqlQuery = "";
+    sqlQuery = "SELECT auction_id, bid_id, auction.email AS auction_email, category, model, bid.email AS bidder_email FROM auction JOIN bid USING(auction_id) JOIN item USING(item_id) WHERE auction.email != bid.email";
     sql.query(sqlQuery, (err, res) => {
         if(err){
             console.log("Model: Auctions: getDetails: Some error occured!");
@@ -151,11 +151,12 @@ Auction.getMyAuctions = (email, result) => {
         });
 	});
 
-}
+};
 Auction.getAuction = (auctionId, email, result) => {
     console.log("Model: Auctions: getAuction: Invoked !");
     sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)), bid_auction AS( select amount, auction_id FROM bid WHERE auction_id = " +  sql.escape(auctionId)+ " ORDER BY bid_timestamp DESC LIMIT 1) select auction_id, closing_date, bid_increment, auction.item_id, category, brand, type, color, model, imagePath, imageId, amount, auction.email, auction.winner, auction.final_price FROM auction JOIN item_images USING(item_id) JOIN bid_auction USING(auction_id) WHERE auction.auction_id = " + sql.escape(auctionId);
-	sql.query(sqlQuery, (err, res) => {
+	console.log(sqlQuery);
+    sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("Model: Auction: getAuction: Error in getting Auction: ", err);
 			result({ "message": err }, null);
@@ -179,7 +180,7 @@ Auction.getAuction = (auctionId, email, result) => {
             })
         };
 	});
-}
+};
 Auction.getAuctions = (isWinner, email,result) => {
 	console.log("Model: Auctions: getAuctions: Invoked !");
     if (isWinner == "true"){
@@ -228,7 +229,7 @@ Auction.create = (auction, result) => {
             })
         };
     });
-}
+};
 
 
 module.exports = Auction;
