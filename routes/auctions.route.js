@@ -32,6 +32,12 @@ router.get('/myAuctions', auctions.getMyAuctions);
 
 router.get('/:auctionId', auctions.getAuction);
 
+router.post('/deleteBid/:auctionId/:bidId', auctions.deleteBid);
+
+router.post('/deleteAuction/:auctionId', auctions.deleteAuction);
+
+router.get('/allDetails', auctions.getDetails);
+
 router.put('/updateAuctions', auctions.updateAuctions);
 
 

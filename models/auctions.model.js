@@ -37,6 +37,51 @@ async function updateAuctionsTable(updateAuctionData){
     return updateAuctions;
 };
 
+Auction.getDetails = (result) => {
+    console.log("Model: Auctions: getDetails: Invoked !");
+    sqlQuery = "";
+    sql.query(sqlQuery, (err, res) => {
+        if(err){
+            console.log("Model: Auctions: getDetails: Some error occured!");
+            result({ "message": err }, null);
+			return;
+        } else{
+            console.log("Model: Auctions: getDetails: got all auction details");
+            result(null, res);
+        };
+    });
+};
+
+Auction.deleteBid = (auctionId, bidId, result) => {
+    console.log("Model: Auctions: deleteBid: Invoked !");
+    sqlQuery = "DELETE FROM bid WHERE auction_id = " + sql.escape(auctionId) + " AND bid_id = " + sql.escape(bidId);
+    sql.query(sqlQuery, (err, res) => {
+        if(err){
+            console.log("Model: Auctions: deleteBid: Some error occured!");
+            result({ "message": err }, null);
+			return;
+        } else{
+            console.log("Model: Auctions: deleteBid: deleted bid");
+            result(null, res);
+        };
+    });
+};
+
+Auction.deleteAuction = (auctionId, result) => {
+    console.log("Model: Auctions: deleteBid: Invoked !");
+    sqlQuery = "DELETE FROM auction WHERE auction_id = " + sql.escape(auctionId);
+    sql.query(sqlQuery, (err, res) => {
+        if(err){
+            console.log("Model: Auctions: deleteAuction: Some error occured!");
+            result({ "message": err }, null);
+			return;
+        } else {
+            console.log("Model: Auctions: deleteAuction: deleted auction");
+            result(null, res);
+        };
+    });
+};
+
 Auction.updateAuctions = (email, result) => {
     console.log("Model: Auctions: updateAuctions: Invoked !");
     var datetime = new Date();
@@ -100,8 +145,9 @@ Auction.getMyAuctions = (email, result) => {
                 console.log("Model: Auction: getMyAuctions: Error in getting My Auctions: ", errBidAuction);
                 result({ "message": errBidAuction }, null);
                 return;
-            }
-            result(null, {"createdAuction": resCreatedAuction, "bidAuction": resBidAuction});
+            } else{
+                result(null, {"createdAuction": resCreatedAuction, "bidAuction": resBidAuction});
+            };
         });
 	});
 

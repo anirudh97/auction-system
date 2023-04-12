@@ -5,6 +5,61 @@ const path = require('path');
 const Auction = require('../models/auctions.model.js');
 const Items = require('../models/items.model.js');
 
+exports.deleteBid = (req,res) => {
+    Auction.deleteBid( req.params.auctionId, req.params.bidId, (err, data) => {
+        if (err){
+            res.status(500).send({
+                message:
+                    err.message || "Controller: Auctions: deleteBid: Some error occured"
+            });
+        }
+        else {
+            res.redirect("/auctions/all");
+        };
+    });
+};
+
+exports.deleteAuction = (req,res) => {
+    Auction.deleteAuction( req.params.auctionId, (err, data) => {
+        if (err){
+            res.status(500).send({
+                message:
+                    err.message || "Controller: Auctions: deleteAuction: Some error occured"
+            });
+        }
+        else {
+            res.redirect("/auctions/all");
+        };
+    });
+};
+
+exports.getDetails = (req, res) => {
+    if (req.session.loggedIn != true){
+        res.redirect("/");
+    }
+    else{
+        Auction.getDetails((err, data) => {
+            if (err){
+                res.status(500).send({
+                    message:
+                        err.message || "Controller: Auctions: getAllBids: Some error occured"
+                });
+            }
+            else {
+                auctions = {}
+                seenAuctionId = new Set();
+
+                for(var i = 0; i < data.length; i++){
+                    if(!seenAuctionId.has(data[i].auction_id)){
+                        auctions[data[i].auction_id] = []
+                    }
+                };
+                res.render("pages/customerRepDelete", allData)
+            };
+        })
+    };
+};
+
 exports.updateAuctions = (req, res) => {
     Auction.updateAuctions(req.session.user, (err, data) => {
         if (err){
