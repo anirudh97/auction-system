@@ -23,7 +23,7 @@ app.set('view engine', 'ejs');
 
 // Default route
 app.get("/", (req, res) => {
-  res.render('pages/home');
+  res.render('pages/index');
 });
 
 app.use("/", usersRouter);
