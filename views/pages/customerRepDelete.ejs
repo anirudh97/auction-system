@@ -44,15 +44,19 @@
                 </tr>
               </thead>
               <tbody>
-                <% for(var j=0; j<data[i].bids.length; j++) {%>
-                  <tr>
-                    <th scope="row"><%= data[i].auctionId%></th>
-                    <td><%= data[i].bids[j].bidId%></td>
-                    <td><%= data[i].bids[j].bidderEmail%></td>
-                    <form method="POST" action="/auctions/deleteBid/<%= data[i].auctionId%>/<%= data[i].bids[j].bidId%>">
-                      <td><button type="submit" class="btn btn-secondary w-50">Delete Bid</button></td>
-                    </form>
-                  </tr>
+                <% if(data[i].bids.length==0){ %>
+                  <b>No Bids.</b>
+                <% } else { %>
+                  <% for(var j=0; j<data[i].bids.length; j++) {%>
+                    <tr>
+                      <th scope="row"><%= data[i].auctionId%></th>
+                      <td><%= data[i].bids[j].bidId%></td>
+                      <td><%= data[i].bids[j].bidderEmail%></td>
+                      <form method="POST" action="/auctions/deleteBid/<%= data[i].auctionId%>/<%= data[i].bids[j].bidId%>">
+                        <td><button type="submit" class="btn btn-secondary w-50">Delete Bid</button></td>
+                      </form>
+                    </tr>
+                  <% } %>
                 <% } %>
               </tbody>
             </table>

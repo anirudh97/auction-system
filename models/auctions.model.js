@@ -39,7 +39,7 @@ async function updateAuctionsTable(updateAuctionData){
 
 Auction.getDetails = (result) => {
     console.log("Model: Auctions: getDetails: Invoked !");
-    sqlQuery = "SELECT auction_id, bid_id, auction.email AS auction_email, category, model, bid.email AS bidder_email FROM auction JOIN bid USING(auction_id) JOIN item USING(item_id) WHERE auction.email != bid.email";
+    sqlQuery = "SELECT auction_id, bid_id, auction.email AS auction_email, category, model, bid.email AS bidder_email FROM auction JOIN bid USING(auction_id) JOIN item USING(item_id)";
     sql.query(sqlQuery, (err, res) => {
         if(err){
             console.log("Model: Auctions: getDetails: Some error occured!");

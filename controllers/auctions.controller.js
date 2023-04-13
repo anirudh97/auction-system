@@ -51,20 +51,24 @@ exports.getDetails = (req, res) => {
                 seenAuctionId = new Set();
 
                 for (var i = 0; i < data.length; i++) {
-                    if(data[i].auction_id in bids){
+                    if(data[i].auction_id in bids && data[i].bidder_email != data[i].auction_email){
                         bids[data[i].auction_id].push({"bidId": data[i].bid_id, "bidderEmail": data[i].bidder_email});
-                    } else{
+                    } else if(data[i].bidder_email != data[i].auction_email){
                         bids[data[i].auction_id] = [{"bidId": data[i].bid_id, "bidderEmail": data[i].bidder_email}];
                     };
                 }
                 for (var i = 0; i < data.length; i++) {
                     if (!seenAuctionId.has(data[i].auction_id)) {
-                        auctions.push({"auctionId": data[i].auction_id, "auctionEmail": data[i].auction_email, "category": data[i].category, "model": data[i].model, "bids": bids[data[i].auction_id]})
+                        if(bids[data[i].auction_id] == undefined){
+                            auctions.push({"auctionId": data[i].auction_id, "auctionEmail": data[i].auction_email, "category": data[i].category, "model": data[i].model, "bids": []})
+                        } else{
+                            auctions.push({"auctionId": data[i].auction_id, "auctionEmail": data[i].auction_email, "category": data[i].category, "model": data[i].model, "bids": bids[data[i].auction_id]})
+                        };
+                        
                     }
                     seenAuctionId.add(data[i].auction_id);
                 };
                 allData = {"user": req.session.user, "data": auctions};
-                console.log(allData.data);
                 res.render("pages/customerRepDelete", allData)
             };
         })
@@ -257,11 +261,7 @@ exports.create = async (req, res) => {
                 .jpeg({ quality: 100 })
                 .toFile(newFilename)
         })
-    ).then(() => {
-        for (let i = 0; i < req.files.length; i++) {
-            fs.unlinkSync(req.files[i].path)
-        }
-    });
+    );
 
     const Item = new Items({
         model: req.body.model,
