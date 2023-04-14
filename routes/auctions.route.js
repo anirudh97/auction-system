@@ -38,7 +38,9 @@ router.post('/deleteBid/:auctionId/:bidId', auctions.deleteBid);
 
 router.post('/deleteAuction/:auctionId', auctions.deleteAuction);
 
-router.put('/updateAuctions', auctions.updateAuctions);
+router.post('/updateAuctions', auctions.updateAuctions);
+
+router.post('/search', auctions.search);
 
 
 

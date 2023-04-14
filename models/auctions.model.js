@@ -12,6 +12,23 @@ const Auction = function(auction){
 };
 
 
+Auction.search = (email, searchData, result) => {
+	console.log("Model: Auctions: search: Invoked !");
+
+    sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId, auction.email FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.winner = 'NA' AND auction.email != " + sql.escape(email) + " AND item_images.brand = " + sql.escape(searchData.brand) + " AND item_images.category = " + sql.escape(searchData.category) + " AND item_images.color = " + sql.escape(searchData.color);
+    
+	sql.query(sqlQuery, (err, res) => {
+		if (err) {
+			console.log("Model: Auction: search: Error in getting search auctions: ", err);
+			result({ "message": err }, null);
+			return;
+		}
+		result(null, res)
+
+	});
+};
+
+
 function executeQuery(d){
     return new Promise (function(resolve, reject){
         sqlQuery = "UPDATE auction SET winner = " + sql.escape(d.winner) + " ,final_price = " +  sql.escape(d.finalPrice) + " WHERE auction_id = " + sql.escape(d.auctionId);
@@ -87,7 +104,7 @@ Auction.updateAuctions = (email, result) => {
     var datetime = new Date();
     currentDate = datetime.toISOString().slice(0,10);
 
-    sqlQueryExpiredAuctions = "With cte as (Select auction_id, bid.amount,bid_timestamp, minimum_price, bid.email AS bid_email, auction.email AS auction_email, dense_rank() OVER ( partition by AUCTION_ID order by bid_timestamp desc ) AS RNK From auction Join bid USING(auction_id) Where closing_date = " + sql.escape(currentDate) + ")  Select * From cte Where rnk = 1;"
+    sqlQueryExpiredAuctions = "With cte as (Select auction_id, bid.amount,bid_timestamp, minimum_price, bid.email AS bid_email, auction.email AS auction_email, dense_rank() OVER ( partition by AUCTION_ID order by bid_timestamp desc ) AS RNK From auction Join bid USING(auction_id) WHERE closing_date = " + sql.escape(currentDate) + ") SELECT * FROM cte WHERE rnk = 1;"
     console.log(sqlQueryExpiredAuctions);
     sql.query(sqlQueryExpiredAuctions, (errExpiredAuctions, resExpiredAuctions) => {
         if (errExpiredAuctions){

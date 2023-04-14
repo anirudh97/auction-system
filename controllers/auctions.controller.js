@@ -5,6 +5,60 @@ const path = require('path');
 const Auction = require('../models/auctions.model.js');
 const Items = require('../models/items.model.js');
 
+exports.search = (req, res) => {
+    searchData = {
+        "category": req.body.category,
+        "color": req.body.color,
+        "brand": req.body.brand
+    }
+    Auction.search(req.session.user, searchData, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message:
+                    err.message || "Controller: Auctions: search: Some error occured"
+            });
+        }
+        else {
+            if (data != null) {
+                auctions = [];
+                already_seen_items = new Set();
+                item_images = {};
+                for (let i = 0; i < data.length; i++) {
+                    imagePathClean = data[i].imagePath.split('public')[1];
+                    if (data[i].item_id in item_images) {
+                        item_images[data[i].item_id].push(imagePathClean)
+                    } else {
+                        item_images[data[i].item_id] = [imagePathClean]
+                    };
+                };
+                for (let i = 0; i < data.length; i++) {
+                    if (already_seen_items.has(data[i].item_id)) {
+                        continue
+                    } else {
+                        auctions.push({
+                            "auctionId": data[i].auction_id,
+                            "closingDate": data[i].closing_date,
+                            "itemId": data[i].item_id,
+                            "imagePaths": item_images[data[i].item_id],
+                            "brand": data[i].brand,
+                            "category": data[i].category,
+                            "type": data[i].type
+                        });
+
+                        already_seen_items.add(data[i].item_id);
+                    };
+                };
+                allData = {"user": req.session.user, "auctions": auctions};
+                res.render("pages/search", {"data": allData});
+            }
+            else {
+                allData = {"user": req.session.user, "auctions": []};
+                res.render("pages/search", {"data": allData});
+            };
+        };
+    });
+};
+
 exports.deleteBid = (req, res) => {
     Auction.deleteBid(req.params.auctionId, req.params.bidId, (err, data) => {
         if (err) {

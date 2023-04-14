@@ -1,5 +1,66 @@
 const User = require('../models/users.model.js');
 const Category = require('../models/category.model.js');
+const Admin = require('../models/admin.model');
+
+exports.report1 = (req, res) => {
+	Admin.report1((err, data) => {
+		if (err) {
+			res.status(500).send({
+                message:
+                    err.message || "Controller: Admin: report1: Error occured."
+            });
+		}
+		else {
+			console.log("Controller: Admin: report1: retreived report Successfully!")
+			res.render('pages/report1', data);
+		}
+	});
+};
+
+exports.report1 = (req, res) => {
+	Admin.report1((err, data) => {
+		if (err) {
+			res.status(500).send({
+                message:
+                    err.message || "Controller: Admin: report1: Error occured."
+            });
+		}
+		else {
+			console.log("Controller: Admin: report1: retreived report Successfully!")
+			res.render('pages/report1', data);
+		}
+	});
+};
+
+exports.report1 = (req, res) => {
+	Admin.report1((err, data) => {
+		if (err) {
+			res.status(500).send({
+                message:
+                    err.message || "Controller: Admin: report1: Error occured."
+            });
+		}
+		else {
+			console.log("Controller: Admin: report1: retreived report Successfully!")
+			res.render('pages/report1', data);
+		}
+	});
+};
+
+exports.report1 = (req, res) => {
+	Admin.report1((err, data) => {
+		if (err) {
+			res.status(500).send({
+                message:
+                    err.message || "Controller: Admin: report1: Error occured."
+            });
+		}
+		else {
+			console.log("Controller: Admin: report1: retreived report Successfully!")
+			res.render('pages/report1', data);
+		}
+	});
+};
 
 exports.createCustRep = (req, res) => {
 	if (!req.body) {

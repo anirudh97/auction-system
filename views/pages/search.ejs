@@ -4,15 +4,6 @@
 <head>
   <%- include('../partials/head'); %>
     <script>
-      $(document).ready(function () {
-        $.get("/category", function(data, status) {
-          var options = "<option selected>Choose Category</option>";
-          $.each(data, function(i) {
-            var categoryOption = '<option value="' + data[i].name + '" id = "category" ' + data[i].category_id + '>' + data[i].name + '</option>'
-            options += categoryOption;
-          });
-          $('#category').append(options);
-        });
         $.get("/auctions?isWinner=false", function (data, status) {
           if(data.length == 0){
             $('#noAuction').append('<p class="fs-4">No Auctions to display</p>');
@@ -49,7 +40,6 @@
           });
           };
         });
-      });
     </script>
 </head>
 
@@ -58,35 +48,6 @@
 </header>
 
 <body>
-  <% if( locals.data ) { %>
-    <% if( locals.data.alertData ) { %>
-        <div class="d-flex justify-content-end pt-5 mt-5">
-          <div class="fixed-right" id="liveAlertPlaceholder"></div>
-        </div>
-        <script>
-            const createAlert = (message, type) => {
-                const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-                const wrapper = document.createElement('div')
-                wrapper.innerHTML = [
-                    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-                    `   <div>${message}</div>`,
-                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-                    '</div>'
-                ].join('')
-                alertPlaceholder.append(wrapper)
-            };
-            createAlert("<%= data.alertData.message %>", "<%= data.alertData.alertType %>")
-        </script>
-    <% } %>
-<% } %>
-  <div class="d-flex justify-content-lg-center pt-5 mt-5">
-    <div class="input-group w-75">
-      <select class="form-select" id="category">
-      </select>
-      <input type="text" class="form-control w-50" placeholder="Search....." />
-      <button type="submit" class="btn btn-primary">Search</button>
-    </div>
-  </div>
   <div class="d-flex justify-content-lg-center pt-5">
     <p class="fs-4">Live Auctions</p>
   </div>

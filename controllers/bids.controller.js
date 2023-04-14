@@ -87,7 +87,8 @@ exports.postAutoBid = (req, res) => {
         }
         else {
             console.log("Controller: Bids: postAutoBid: retreived auction ids for autobid Successful!");
-            res.send(data);
+            allData = {"loggedUser": req.session.user, "data": data};
+            res.send(allData);
         };
 
     });

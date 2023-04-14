@@ -89,7 +89,11 @@ Bid.checkUpperLimit = (email, result) => {
 
 Bid.postAutoBid = (email, result) => {
     console.log("Model: Bids: postAutoBid: Invoked !");
-    sqlQuery = "select auto_bid.auction_id from auto_bid join bid using(auction_id) where auto_bid.email = " + sql.escape(email) + " and auto_bid.upper_limit <= bid.amount order by bid.bid_timestamp desc limit 1;";
+    var datetime = new Date();
+    currentDate = datetime.toISOString().slice(0,10);
+
+    sqlQuery = "select auto_bid.auction_id, auction.bid_increment, bid.amount, bid.email AS bidder_email FROM auto_bid join bid using(auction_id) JOIN auction USING(auction_id) WHERE auto_bid.email = " + sql.escape(email) + " AND auto_bid.upper_limit >= bid.amount AND auction.closing_date > " + sql.escape(currentDate) + "ORDER BY bid.bid_timestamp desc limit 1;";
+    console.log(sqlQuery)
     sql.query(sqlQuery, (err, res) => {
         if(err){
             console.log("Model: Bids: postAutoBid: some error occured: !", err);
