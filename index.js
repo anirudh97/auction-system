@@ -82,8 +82,8 @@ app.use(express.static(__dirname + "/public"));
 //   }
 // });
 // Server Listen
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.listen(port, "127.0.0.1", () => {
+  console.log(`Example app listening at http://127.0.0.1:${port}`);
 });
 
 
