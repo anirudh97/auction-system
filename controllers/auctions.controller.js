@@ -11,6 +11,7 @@ exports.search = (req, res) => {
         "color": req.body.color,
         "brand": req.body.brand
     }
+    console.log(searchData)
     Auction.search(req.session.user, searchData, (err, data) => {
         if (err) {
             res.status(500).send({
@@ -49,6 +50,7 @@ exports.search = (req, res) => {
                     };
                 };
                 allData = {"user": req.session.user, "auctions": auctions};
+                console.log(allData);
                 res.render("pages/search", {"data": allData});
             }
             else {
@@ -130,7 +132,7 @@ exports.getDetails = (req, res) => {
 };
 
 exports.updateAuctions = (req, res) => {
-    Auction.updateAuctions(req.session.user, (err, data) => {
+    Auction.updateAuctions((err, data) => {
         if (err) {
             res.status(500).send({
                 message:
@@ -227,7 +229,8 @@ exports.getAuction = (req, res) => {
                                 "email": data.auctionDetails[i].email,
                                 "isAutoBid": data.isAutoBid,
                                 "user": req.session.user,
-                                "winner": data.auctionDetails[i].winner
+                                "winner": data.auctionDetails[i].winner,
+                                "highestBid": data.highestBid
                             };
 
                             already_seen_items.add(data.auctionDetails[i].item_id);

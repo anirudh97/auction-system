@@ -6,50 +6,45 @@
 </head>
 
 
-  <header>
-    <%- include('../partials/header'); %>
-  </header>
-  <body>
-  
-       
-      <div class="col">
-        <div class="card">
-          <img src=""class="card-img-top" alt="..."> 
-          <div class="card-body"> 
-            <h5 class="card-title">Card title</h5> 
-            <p class="card-text"> Closing Date:</p>
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+
+  <% for(var i=0; i<data.auctions.length; i++) {%>
+    <div class="col mt-5 pt-5" id="auctionid">
+      <div class="card w-75 border-primary">
+        <div id="item_carousel_id_<%=data.auctions[i].auctionId%>" class="carousel slide w-100">
+          <div class="carousel-inner">
+            <% for(var j=0; j<data.auctions[i].imagePaths.length; j++) {%>
+              <div class="carousel-item">
+                <img src="<%=data.auctions[i].imagePaths[j]%>" class="d-block w-100" alt="item image">
+              </div>
+            <% } %>
           </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#item_carousel_id_<%=data.auctions[i].auctionId%>" data-bs-slide="prev">
+            <span class="fa fa-angle-left fa-2x" aria-hidden="true" style="color: black"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#item_carousel_id" data-bs-slide="next">
+            <span class="fa fa-angle-right fa-2x" aria-hidden="true" style="color: black"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
-      </div>';
-      <div class="col" id="auctionid"> 
-        <div class="card w-75 border-primary">
-          <div id="item_carousel_id" class="carousel slide w-100"> 
-            <div class="carousel-inner">';
-              <div class="carousel-item active">
-                <img src="#" class="d-block w-100" alt="item image">
-              </div>
+        <div class="card-body">
+          <form action="/auctions/<%=data.auctions[i].auctionId%>" method="GET">
+            <h5 class="card-title"><%=data.auctions[i].category%>:<%=data.auctions[i].type%></h5>
+            <p class="card-text">Brand: <%=data.auctions[i].brand%></p>
+            <p class="card-text">Closing Date: <%=data.auctions[i].closingDate%></p>
+            <div class="col text-center">
+              <button type="submit" class="btn btn-primary w-100">Go to Auction</button>
             </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#item_carousel_id" data-bs-slide="prev"> 
-                <span class="fa fa-angle-left fa-2x" aria-hidden="true" style="color: black"></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#item_carousel_id" data-bs-slide="next"> 
-              <span class="fa fa-angle-right fa-2x" aria-hidden="true" style="color: black"></span> 
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-          <div class="card-body"><form action="/auctions/' + data[i].auctionId + '" method="GET">
-            <h5 class="card-title">Item Category:</h5>
-              <p class="card-text">Brand:</p>
-              <p>Type:</p>';
-              <p class="card-text">Closing Date:</p>';
-              <div class="col text-center">
-                <button type="submit" class="btn btn-primary w-100">Go to Auction</button>
-              </div>
-            </form>
-          </div>
+          </form>
         </div>
       </div>
+    </div>
+  <% } %>
 </body>
 
 </html>

@@ -2,6 +2,10 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const Bids = require('./models/bids.model.js');
+const { exit } = require('process');
+const User = require('./models/users.model');
+const Auction = require('./models/auctions.model');
 
 var bidsRouter = require('./routes/bids.route');
 var adminRouter = require('./routes/admin.route');
@@ -12,6 +16,7 @@ var auctionsRouter = require('./routes/auctions.route');
 var watchlistRouter = require('./routes/watchlist.route');
 var questionsRouter = require('./routes/questions.route');
 var customerRepRouter = require('./routes/customerRep.route');
+
 
 const app = express();
 const port = 3000;
@@ -39,6 +44,43 @@ app.use("/customerRep", customerRepRouter);
 
 app.use(express.static(__dirname + "/public"));
 
+
+
+
+// User.getUsers((err, users) => {
+//     if(err){
+//       console.log("Error getting users: ", err)
+//     } else {
+//       for (var i = 0; i < users.length; i++){
+//         var user = users[i].email;
+//         Bids.postAutoBid(users[i].email, (err, postAutoBidData) => {
+//           if(err){
+//             console.log("Error getting postAutoBid data: ", err)
+//             exit(1)
+//           } else{
+//             for(var j = 0; j < postAutoBidData.length; j++){
+//               var timestamp = new Date();
+//               if(postAutoBidData[j].bidder_email != user){
+//                 Bids.postBid({"auctionId": postAutoBidData[j].auction_id, "email": user, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData[j].amount) + parseInt(postAutoBidData[j].bid_increment)}, (err, postBidData) => {
+//                   if(err){
+//                     console.log("Error in posting bid: ", err);
+//                     exit(1)
+//                   }
+//                 })
+//               }
+//             }
+//           }
+//         })
+//       }
+//     };
+// });
+
+// Auction.updateAuctions((err, data) => {
+//   if(err){
+//     console.log("error in update auctions: ", err)
+//     exit(1);
+//   }
+// });
 // Server Listen
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

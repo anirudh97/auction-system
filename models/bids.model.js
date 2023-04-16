@@ -7,6 +7,24 @@ const Bid = function(bid){
     this.amount = bid.amount;
 };
 
+Bid.deleteAutoBid = (email, auctionId, result) => {
+    console.log("Model: Bids: deleteAutoBid: Invoked !");
+
+    sqlQuery = "DELETE FROM auto_bid WHERE email = " + sql.escape(email) + " AND auction_id = " + sql.escape(auctionId);
+    console.log(sqlQuery)
+    sql.query(sqlQuery, (err, res) => {
+        if(err){
+            console.log("Model: Bids: deleteAutoBid: some error occured: !", err);
+			result({ "message": err }, null);
+			return;
+        }
+        else{
+            console.log("Model: Bids: deleteAutoBid: delete autobid");
+            result(null,res);
+        };
+    });
+}
+
 Bid.postBid = (bid, result) => {
     console.log("Model: Bids: postBid: Invoked !");
     sqlQuery = "INSERT INTO bid (auction_id, email, bid_timestamp, amount) VALUES(?, ?, ?, ?)";

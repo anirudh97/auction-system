@@ -46,6 +46,7 @@
                 <th scope="col">Item Category</th>
                 <th scope="col">Brand</th>
                 <th scope="col">Color</th>
+                <th scope="col">Delete Watchlist</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +56,7 @@
                   <td><%= data.data[i].category %></td>
                   <td><%= data.data[i].brand %></td>
                   <td><%= data.data[i].color %></td>
+                  <td><form action="/watchlist/deleteWatchlist/<%= data.data[i].watchlist_id%>" method="POST"><button class="btn btn-secondary" type="submit">Delete</button></form></td>
                 </tr>
               <% } %>
             </tbody>

@@ -8,6 +8,19 @@ const Watchlist = function(watchlist){
     this.color = watchlist.color;
 };
 
+Watchlist.deleteWatchlist = (watchlistId, result) => {
+    console.log("Model: Watchlist: deleteWatchlist: Invoked !");
+    sqlQuery = "DELETE FROM watchlist WHERE watchlist_id = " + sql.escape(watchlistId);
+    sql.query(sqlQuery, (err, res) => {
+		if (err) {
+			console.log("Model: Watchlist: getWatchlist: Some error occured !", err);
+			result({ "message": err }, null);
+			return;
+		};
+		result(null, res);
+	});
+};
+
 Watchlist.getWatchlist = (email, result) => {
     console.log("Model: Watchlist: getWatchlist: Invoked !");
     sqlQuery = "SELECT watchlist_id, email, category, brand, color FROM watchlist WHERE email = " + sql.escape(email);

@@ -16,7 +16,6 @@ Auction.search = (email, searchData, result) => {
 	console.log("Model: Auctions: search: Invoked !");
 
     sqlQuery = "WITH item_images AS( select item.item_id AS item_id, category, brand, type, color, model, imagePath, imageId FROM item join itemImages USING (item_id)) select auction_id, closing_date, auction.item_id, category, brand, type, color, model, imagePath, imageId, auction.email FROM auction JOIN item_images ON auction.item_id = item_images.item_id WHERE auction.winner = 'NA' AND auction.email != " + sql.escape(email) + " AND item_images.brand = " + sql.escape(searchData.brand) + " AND item_images.category = " + sql.escape(searchData.category) + " AND item_images.color = " + sql.escape(searchData.color);
-    
 	sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("Model: Auction: search: Error in getting search auctions: ", err);
@@ -99,7 +98,7 @@ Auction.deleteAuction = (auctionId, result) => {
     });
 };
 
-Auction.updateAuctions = (email, result) => {
+Auction.updateAuctions = (result) => {
     console.log("Model: Auctions: updateAuctions: Invoked !");
     var datetime = new Date();
     currentDate = datetime.toISOString().slice(0,10);
@@ -182,17 +181,25 @@ Auction.getAuction = (auctionId, email, result) => {
             sqlQueryAutoBid = "SELECT * FROM auto_bid WHERE auction_id = " + sql.escape(auctionId) + " AND email = " + sql.escape(email);
             sql.query(sqlQueryAutoBid, (errAutoBid, resAutoBid) => {
                 if(errAutoBid){
-                    console.log("Model: Auction: getAuction: Error in getting Auto bid: ", err);
-                    result({ "message": err }, null);
+                    console.log("Model: Auction: getAuction: Error in getting Auto bid: ", errAutoBid);
+                    result({ "message": errAutoBid }, null);
                     return;
                 }
                 else{
-                    if (resAutoBid.length > 0){
-                        result(null, {"auctionDetails": res, "isAutoBid": true});
-                    }else{
-                        result(null, {"auctionDetails": res, "isAutoBid": false});
-                    };
-                   
+                    sqlQueryBid = "SELECT email FROM bid WHERE auction_id = " + sql.escape(auctionId) + " ORDER BY bid_timestamp DESC LIMIT 1;";
+                    sql.query(sqlQueryBid, (errBid, resBid) => {
+                        if(errBid){
+                            console.log("Model: Auction: getAuction: Error in getting highest bid: ", errBid);
+                            result({ "message": errBid }, null);
+                            return;
+                        } else{
+                            if (resAutoBid.length > 0){
+                                result(null, {"auctionDetails": res, "isAutoBid": true, "highestBid": resBid});
+                            }else{
+                                result(null, {"auctionDetails": res, "isAutoBid": false, "highestBid": resBid});
+                            };
+                        }
+                    })
                 };  
             })
         };

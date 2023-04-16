@@ -1,6 +1,20 @@
 const Watchlist = require('../models/watchlist.model.js');
 
 
+exports.deleteWatchlist = (req, res) => {
+    Watchlist.deleteWatchlist(req.params.watchlistId, (err, data) => {
+        if (err){
+            res.status(500).send({
+                message:
+                    err.message || "Controller: Watchlist: deleteWatchlist: Some error occured"
+            });
+        }
+        else{
+            console.log("Controller: Watchlist: deleteWatchlist: deleted watchlist");
+            res.redirect("/watchlist");
+        };
+    });
+}
 exports.getWatchlist = (req, res) => {
     if (req.session.loggedIn != true){
         res.redirect("/");

@@ -65,10 +65,10 @@ exports.checkUpperLimit = (req, res) => {
             console.log("Controller: Bids: checkUpperLimit: Check upper limit for autobid Successful!");
             var responsePayload = {}
             if(data.length > 0){
-                responsePayload = {"data": data, "upperLimitTriggered": true};
+                responsePayload = {"data": data, "upperLimitTriggered": true, "user": req.session.user};
             }
             else{
-                responsePayload = {"data": data, "upperLimitTriggered": false};
+                responsePayload = {"data": data, "upperLimitTriggered": false, "user": req.session.user};
             }
             res.send(responsePayload);
         };
@@ -89,6 +89,23 @@ exports.postAutoBid = (req, res) => {
             console.log("Controller: Bids: postAutoBid: retreived auction ids for autobid Successful!");
             allData = {"loggedUser": req.session.user, "data": data};
             res.send(allData);
+        };
+
+    });
+};
+
+exports.deleteAutoBid = (req, res) => {
+    console.log("Controller: Bids: deleteAutoBid: deleteAutoBid invoked !");
+    Bids.deleteAutoBid(req.body.user, req.params.auctionId, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message:
+                    err.message || "Controller: Bids: deleteAutoBid: Error occured."
+            });
+        }
+        else {
+            console.log("Controller: Bids: deleteAutoBid: deleted autobid Successfully!");
+            res.send(data);
         };
 
     });
