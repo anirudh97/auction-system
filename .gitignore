@@ -4,3 +4,5 @@ npm-debug.log
 *.jpg
 *.jpeg
 *.png
+*.webp
+*.jfif

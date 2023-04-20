@@ -122,7 +122,7 @@ Auction.updateAuctions = (result) => {
     currentDate = datetime.toISOString().slice(0,10);
 
     sqlQueryExpiredAuctions = "With cte as (Select auction_id, bid.amount,bid_timestamp, minimum_price, bid.email AS bid_email, auction.email AS auction_email, dense_rank() OVER ( partition by AUCTION_ID order by bid_timestamp desc ) AS RNK From auction Join bid USING(auction_id) WHERE closing_date = " + sql.escape(currentDate) + ") SELECT * FROM cte WHERE rnk = 1;"
-    console.log(sqlQueryExpiredAuctions);
+    // console.log(sqlQueryExpiredAuctions);
     sql.query(sqlQueryExpiredAuctions, (errExpiredAuctions, resExpiredAuctions) => {
         if (errExpiredAuctions){
             console.log("Model: Auctions: updateAuctions: Error in getting expired auctions !");

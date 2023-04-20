@@ -21,7 +21,7 @@ var customerRepRouter = require('./routes/customerRep.route');
 const app = express();
 const port = 3000;
 
-app.use(session({secret: 'session secret', name: 'sessionId', saveUninitialized: false, resave: false}));
+app.use(session({ secret: 'session secret', name: 'sessionId', saveUninitialized: false, resave: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -46,44 +46,81 @@ app.use(express.static(__dirname + "/public"));
 
 
 
-
-// User.getUsers((err, users) => {
-//     if(err){
-//       console.log("Error getting users: ", err)
-//     } else {
-//       for (var i = 0; i < users.length; i++){
-//         var user = users[i].email;
-//         Bids.postAutoBid(users[i].email, (err, postAutoBidData) => {
-//           if(err){
-//             console.log("Error getting postAutoBid data: ", err)
-//             exit(1)
-//           } else{
-//             for(var j = 0; j < postAutoBidData.length; j++){
-//               var timestamp = new Date();
-//               if(postAutoBidData[j].bidder_email != user){
-//                 Bids.postBid({"auctionId": postAutoBidData[j].auction_id, "email": user, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData[j].amount) + parseInt(postAutoBidData[j].bid_increment)}, (err, postBidData) => {
-//                   if(err){
-//                     console.log("Error in posting bid: ", err);
-//                     exit(1)
-//                   }
-//                 })
-//               }
-//             }
-//           }
-//         })
-//       }
-//     };
-// });
-
-// Auction.updateAuctions((err, data) => {
-//   if(err){
-//     console.log("error in update auctions: ", err)
-//     exit(1);
-//   }
-// });
 // Server Listen
 app.listen(port, "127.0.0.1", () => {
   console.log(`Example app listening at http://127.0.0.1:${port}`);
 });
 
+Auction.updateAuctions(async (err, data) => {
+  if (err) {
+    console.log("error in update auctions: ", err)
+    exit(1);
+  }
+});
+setInterval(async () => {
+  Auction.updateAuctions((err, data) => {
+    if (err) {
+      console.log("error in update auctions: ", err)
+      exit(1);
+    }
+  });
+}, 10000)
+
+User.getUsers( async (err, users) => {
+  if (err) {
+    console.log("Error getting users: ", err)
+  } else {
+    for (var i = 0; i < users.length; i++) {
+      var user = users[i].email;
+      Bids.postAutoBid(users[i].email, (err, postAutoBidData) => {
+        if (err) {
+          console.log("Error getting postAutoBid data: ", err)
+          exit(1)
+        } else {
+          for (var j = 0; j < postAutoBidData.length; j++) {
+            var timestamp = new Date();
+            if (postAutoBidData[j].bidder_email != user) {
+              Bids.postBid({ "auctionId": postAutoBidData[j].auction_id, "email": user, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData[j].amount) + parseInt(postAutoBidData[j].bid_increment) }, (err, postBidData) => {
+                if (err) {
+                  console.log("Error in posting bid: ", err);
+                  exit(1)
+                }
+              })
+            }
+          }
+        }
+      })
+    }
+  };
+});
+
+setInterval( async () => {
+  User.getUsers((err, users) => {
+    if (err) {
+      console.log("Error getting users: ", err)
+    } else {
+      for (var i = 0; i < users.length; i++) {
+        var user = users[i].email;
+        Bids.postAutoBid(users[i].email, (err, postAutoBidData) => {
+          if (err) {
+            console.log("Error getting postAutoBid data: ", err)
+            exit(1)
+          } else {
+            for (var j = 0; j < postAutoBidData.length; j++) {
+              var timestamp = new Date();
+              if (postAutoBidData[j].bidder_email != user) {
+                Bids.postBid({ "auctionId": postAutoBidData[j].auction_id, "email": user, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData[j].amount) + parseInt(postAutoBidData[j].bid_increment) }, (err, postBidData) => {
+                  if (err) {
+                    console.log("Error in posting bid: ", err);
+                    exit(1)
+                  }
+                })
+              }
+            }
+          }
+        })
+      }
+    };
+  });
+}, 10000)
 
