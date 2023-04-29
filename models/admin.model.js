@@ -43,7 +43,7 @@ exports.siteWideTotalSales = (result) => {
 
 exports.bestSellingItems = (result) => {
     console.log("Model: Admin: bestSellingItems: Invoked !");
-    sqlQuery = "Select category, brand, model, final_price - initial_price as profit From auction Join item using(item_id) Order by final_price - initial_price DESC";
+    sqlQuery = "Select category, brand, model, final_price - initial_price as profit From auction Join item using(item_id) where final_price - initial_price > 0 Order by final_price - initial_price DESC";
     sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("Model: Admin: bestSellingItems: Error in getting report: ", err);
@@ -57,7 +57,7 @@ exports.bestSellingItems = (result) => {
 
 exports.userWithMostSpending = (result) => {
     console.log("Model: Admin: userWithMostSpending: Invoked !");
-    sqlQuery = "Select winner, sum(final_price) as total_spending From auction Group by winner Order by final_price DESC";
+    sqlQuery = "select winner, sum(final_price) AS sum_final_price FROM auction WHERE winner not in ('NA', 'NW') group by winner order by sum(final_price) desc;"
     sql.query(sqlQuery, (err, res) => {
 		if (err) {
 			console.log("Model: Admin: userWithMostSpending: Error in getting report: ", err);

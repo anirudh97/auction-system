@@ -4,6 +4,43 @@
 <head>
   <%- include('../partials/head'); %>
     <script>
+      var auctionData = []
+      function createCards(data) {
+        if (data.length == 0) {
+            $('#noAuction').append('<p class="fs-4">No Auctions to display</p>');
+          }
+          else {
+            $.each(data, function (i) {
+              var card_html = '<div class="col"><div class="card"><img src="' + data[i].imagePaths[0] + '"class="card-img-top" alt="..."> <div class="card-body"> <h5 class="card-title">Card title</h5> <p class="card-text"> Closing Date: ' + data[i].closingDate + '</p></div></div></div>';
+              var card_html = '<div class="col" id=auction_' + data[i].auctionId + '"> <div class="card w-75 border-primary">';
+              var carousel_html = '<div id="item_carousel_' + data[i].itemId + '" class="carousel slide w-100"> <div class="carousel-inner">';
+              $.each(data[i].imagePaths, function (j) {
+                var item_image = '<div class="carousel-item active"><img src="' + data[i].imagePaths[j] + '" class="d-block w-100" alt="item image"></div>';
+                carousel_html += item_image;
+              });
+              carousel_html += '</div>';
+              carousel_left_html = '<button class="carousel-control-prev" type="button" data-bs-target="#item_carousel_' + data[i].itemId + '" data-bs-slide="prev"> <span class="fa fa-angle-left fa-2x" aria-hidden="true" style="color: black"></span><span class="visually-hidden">Previous</span></button>';
+              carousel_right_html = '<button class="carousel-control-next" type="button" data-bs-target="#item_carousel_' + data[i].itemId + '" data-bs-slide="next"> <span class="fa fa-angle-right fa-2x" aria-hidden="true" style="color: black"></span> <span class="visually-hidden">Next</span></button></div>';
+              carousel_html += carousel_left_html;
+              carousel_html += carousel_right_html;
+
+              card_html += carousel_html;
+
+              card_body_html = '<div class="card-body"><form action="/auctions/' + data[i].auctionId + '" method="GET"><h5 class="card-title">Item Category: ' + data[i].category + '</h5>';
+              card_body_brand = '<p class="card-text">Brand: ' + data[i].brand + '</p><p>Type: ' + data[i].type + '</p>';
+              card_body_html += card_body_brand;
+              card_body_closing = '<p class="card-text">Closing Date: ' + data[i].closingDate + '</p>';
+              card_body_html += card_body_closing;
+
+              card_body_html += '<div class="col text-center"><button type="submit" class="btn btn-primary w-100">Go to Auction</button></div></form></div>';
+              card_html += card_body_html;
+
+              card_html += '</div></div>';
+
+              $('#target').append(card_html);
+            });
+          };
+      }
       const createAlert = (message, type) => {
         const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
         const wrapper = document.createElement('div')
@@ -85,42 +122,30 @@
           $('#category').append(options);
         });
         $.get("/auctions?isWinner=false", function (data, status) {
-          if (data.length == 0) {
-            $('#noAuction').append('<p class="fs-4">No Auctions to display</p>');
-          }
-          else {
-            $.each(data, function (i) {
-              var card_html = '<div class="col"><div class="card"><img src="' + data[i].imagePaths[0] + '"class="card-img-top" alt="..."> <div class="card-body"> <h5 class="card-title">Card title</h5> <p class="card-text"> Closing Date: ' + data[i].closingDate + '</p></div></div></div>';
-              var card_html = '<div class="col" id=auction_' + data[i].auctionId + '"> <div class="card w-75 border-primary">';
-              var carousel_html = '<div id="item_carousel_' + data[i].itemId + '" class="carousel slide w-100"> <div class="carousel-inner">';
-              $.each(data[i].imagePaths, function (j) {
-                var item_image = '<div class="carousel-item active"><img src="' + data[i].imagePaths[j] + '" class="d-block w-100" alt="item image"></div>';
-                carousel_html += item_image;
-              });
-              carousel_html += '</div>';
-              carousel_left_html = '<button class="carousel-control-prev" type="button" data-bs-target="#item_carousel_' + data[i].itemId + '" data-bs-slide="prev"> <span class="fa fa-angle-left fa-2x" aria-hidden="true" style="color: black"></span><span class="visually-hidden">Previous</span></button>';
-              carousel_right_html = '<button class="carousel-control-next" type="button" data-bs-target="#item_carousel_' + data[i].itemId + '" data-bs-slide="next"> <span class="fa fa-angle-right fa-2x" aria-hidden="true" style="color: black"></span> <span class="visually-hidden">Next</span></button></div>';
-              carousel_html += carousel_left_html;
-              carousel_html += carousel_right_html;
-
-              card_html += carousel_html;
-
-              card_body_html = '<div class="card-body"><form action="/auctions/' + data[i].auctionId + '" method="GET"><h5 class="card-title">Item Category: ' + data[i].category + '</h5>';
-              card_body_brand = '<p class="card-text">Brand: ' + data[i].brand + '</p><p>Type: ' + data[i].type + '</p>';
-              card_body_html += card_body_brand;
-              card_body_closing = '<p class="card-text">Closing Date: ' + data[i].closingDate + '</p>';
-              card_body_html += card_body_closing;
-
-              card_body_html += '<div class="col text-center"><button type="submit" class="btn btn-primary w-100">Go to Auction</button></div></form></div>';
-              card_html += card_body_html;
-
-              card_html += '</div></div>';
-
-              $('#target').append(card_html);
-            });
-          };
+            auctionData = data
+            createCards(data)
         });
       });
+
+      function sortByDate(type){
+        $("#target").empty()
+        console.log(type)
+        if(type == "lh"){
+          var auctionDataCopy = auctionData
+          auctionDataCopy.sort(function(a,b){ 
+            return a.closingDate - b.closingDate;
+            }).reverse();
+          createCards(auctionDataCopy)
+        } else if(type == "hl") {
+          var auctionDataCopy = auctionData
+          auctionDataCopy.sort(function(a,b){ 
+            return a.closingDate - b.closingDate;
+            });
+          createCards(auctionDataCopy)
+        }
+        
+         
+      }
     </script>
 </head>
 
@@ -173,6 +198,20 @@
             <p class="fs-4">Live Auctions</p>
           </div>
           <div class="d-flex justify-content-lg-center pt-5" id="noAuction">
+          </div>
+          <div class="d-flex pt-5 px-5" id="sortStuff">
+            <!-- <div class="form-check px-2">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onchange="sortByDate('hl')">
+              <label class="form-check-label" for="flexRadioDefault1">
+                Sort By Closing Date: Most Recent
+              </label>
+            </div> -->
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onchange="sortByDate('lh')">
+              <label class="form-check-label" for="flexRadioDefault2">
+                Sort By Closing Date: Earliest Closing
+              </label>
+            </div>
           </div>
           <div class="d-flex justify-content-lg-center pt-5">
             <div class="row row-cols-1 row-cols-md-3 g-4 mx-5 px-5" id="target">

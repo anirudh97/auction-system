@@ -71,7 +71,7 @@ exports.userWithMostSpending = (req, res) => {
 		}
 		else {
 			console.log("Controller: Admin: userWithMostSpending: retreived report Successfully!")
-			res.render('pages/userWithMostSpending', {"data": data});
+			res.render('pages/userWithMostSpendings.ejs', {"data": data});
 		}
 	});
 };
