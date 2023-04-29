@@ -6,11 +6,20 @@
     div:hover #createAuction {
         cursor: pointer;
     }
+    div:hover #createMyAuctionForm {
+        cursor: pointer;
+    }
+    div:hover #createWatchlistForm {
+        cursor: pointer;
+    }
+    div:hover #createHelpRequestsForm {
+        cursor: pointer;
+    }
 </style>
 
 <nav class="navbar navbar-expand-lg bg-primary fixed-top">
     <div class="container-fluid">
-        <form action="/" method="GET" id="homeForm">
+        <form action="/home" method="GET" id="homeForm">
             <div class="" id="logo" onclick="document.getElementById('homeForm').submit();">
                 <i class="fa-solid fa-cart-shopping fa-xl" style="color: #fff;"></i>
                 <span style="color: #fff;" class="fs-4">BuyMe</span>
@@ -26,22 +35,22 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/" method="GET" id="createAuctionForm">
-                        <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <form action="/auctions/myAuctions" method="GET" id="createMyAuctionForm">
+                        <div id="myAuctions" onclick="document.getElementById('createMyAuctionForm').submit();">
                             <a class="nav-link" style="color: #fff;">My Auctions</a>
                         </div>
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/" method="GET" id="createAuctionForm">
-                        <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <form action="/watchlist" method="GET" id="createWatchlistForm">
+                        <div id="createWatchlist" onclick="document.getElementById('createWatchlistForm').submit();">
                             <a class="nav-link" style="color: #fff;">My Watchlist</a>
                         </div>
                     </form>
                 </li>
                 <li class="nav-item">
-                    <form action="/" method="GET" id="createAuctionForm">
-                        <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                    <form action="/questions/myQuestions" method="GET" id="createHelpRequestsForm">
+                        <div id="createHelpRequests" onclick="document.getElementById('createHelpRequestsForm').submit();">
                             <a class="nav-link" style="color: #fff;">My Help Requests</a>
                         </div>
                     </form>
@@ -50,7 +59,7 @@
             <span>
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                        aria-expanded="false"><%=data.user%>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
@@ -64,8 +73,8 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <form action="/" method="GET" id="createAuctionForm">
-                                <div id="createAuction" onclick="document.getElementById('createAuctionForm').submit();">
+                            <form action="/deleteUser" method="POST" id="deleteUserForm">
+                                <div id="createAuction" onclick="document.getElementById('deleteUserForm').submit();">
                                     <a class="dropdown-item"><i class="fa-solid fa-trash" style="padding-right: 5px;"></i>Delete Account</a>
                                 </div>
                             </form>

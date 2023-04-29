@@ -1,5 +1,19 @@
 const User = require('../models/users.model.js')
 
+
+exports.deleteUser = (req, res) => {
+	User.deleteUser(req.session.user, (err, data) => {
+		if(err){
+			res.status(500).send({
+                message:
+                    err.message || "Controller: User: deleteUser: Error occured in deleting user."
+            });
+		}
+		else{
+			res.redirect("/");
+		};
+	});
+}
 exports.create = (req, res) => {
 	if (!req.body) {
 		res.render('pages/signup', { "status": 400, "data": { "message": "Values cannot be empty!", "alertType": "danger" } });
@@ -55,8 +69,16 @@ exports.signin = (req, res) => {
 			console.log("Controller: User: create: Sigin Successful!")
 			req.session.loggedIn = true
 			req.session.user = data.user
-			console.log(req.session)
-			res.redirect('/home')
+			
+			if (type == "admin"){
+				res.redirect('/adminHome');
+			}
+			else if(type == "custRep"){
+				res.redirect('/custRepHome');
+			}
+			else{
+				res.redirect('/home');
+			};
 		}
 	});
 

@@ -4,17 +4,17 @@
 <head>
   <%- include('../partials/head'); %>
     <script>
-      $(document).ready(function () {
-        $.get("/auctions?isWinner=false", function (data, status) {
-          if(data.length == 0){
+      var auctionData = []
+      function createCards(data) {
+        if (data.length == 0) {
             $('#noAuction').append('<p class="fs-4">No Auctions to display</p>');
           }
-          else{
+          else {
             $.each(data, function (i) {
               var card_html = '<div class="col"><div class="card"><img src="' + data[i].imagePaths[0] + '"class="card-img-top" alt="..."> <div class="card-body"> <h5 class="card-title">Card title</h5> <p class="card-text"> Closing Date: ' + data[i].closingDate + '</p></div></div></div>';
               var card_html = '<div class="col" id=auction_' + data[i].auctionId + '"> <div class="card w-75 border-primary">';
               var carousel_html = '<div id="item_carousel_' + data[i].itemId + '" class="carousel slide w-100"> <div class="carousel-inner">';
-              $.each(data[i].imagePaths, function (j){
+              $.each(data[i].imagePaths, function (j) {
                 var item_image = '<div class="carousel-item active"><img src="' + data[i].imagePaths[j] + '" class="d-block w-100" alt="item image"></div>';
                 carousel_html += item_image;
               });
@@ -29,19 +29,123 @@
               card_body_html = '<div class="card-body"><form action="/auctions/' + data[i].auctionId + '" method="GET"><h5 class="card-title">Item Category: ' + data[i].category + '</h5>';
               card_body_brand = '<p class="card-text">Brand: ' + data[i].brand + '</p><p>Type: ' + data[i].type + '</p>';
               card_body_html += card_body_brand;
-              card_body_closing = '<p class="card-text">Closing Date: ' + data[i].closingDate +'</p>';
+              card_body_closing = '<p class="card-text">Closing Date: ' + data[i].closingDate + '</p>';
               card_body_html += card_body_closing;
-              
+
               card_body_html += '<div class="col text-center"><button type="submit" class="btn btn-primary w-100">Go to Auction</button></div></form></div>';
               card_html += card_body_html;
 
               card_html += '</div></div>';
-            
-            $('#target').append(card_html);
-          });
+
+              $('#target').append(card_html);
+            });
           };
+      }
+      const createAlert = (message, type) => {
+        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+          `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+          `   <div>${message}</div>`,
+          '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+          '</div>'
+        ].join('')
+        alertPlaceholder.append(wrapper)
+      };
+      function watchlist() {
+        $.get("/watchlist/trackWatchlist", function (data, status) {
+          console.log(data)
+          $.each(data, function (i) {
+            var msg = "Watchlist Match!!!!:  <a href = ' " + window.location.origin + "/auctions/" + data[i].auction_id + "'>Go to Auction</a>";
+            console.log(msg);
+            createAlert(msg, "warning")
+          });
+        });
+      }
+      function checkUpperLimit() {
+        $.get("/bids/checkUpperLimit", function (data, status) {
+          if (data.upperLimitTriggered == true) {
+            $.each(data.data, function (i) {
+              // console.log(data.data[i][0])
+              $.each(data.data[i], function (j) {
+                var msg = "Upper limit hit for auction:  <a href = ' " + window.location.origin + "/auctions/" + data.data[i][j].auction_id + "'>Go to Auction</a>";
+                // console.log(msg);
+                createAlert(msg, "warning");
+                $.ajax({
+                  url: "/bids/deleteAutoBid/" + data.data[i][j].auction_id,
+                  type: "POST",
+                  data: JSON.stringify({ "user": data.user }),
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function () {
+                    console.log("deleted Auto Bid");
+                  }
+                });
+              });
+            });
+          }
+        });
+      }
+      $(document).ready(function () {
+        watchlist();
+        setInterval(watchlist, 1000 * 60 * 1);
+        checkUpperLimit();
+        setInterval(checkUpperLimit, 1000 * 60 * 1);
+
+        // $.get("/bids/postAutoBid", function(data, status){
+        //     $.each(data.data, function(i) {
+        //       if(data.loggedUser != data.data[i].bidder_email){
+        // $.ajax({
+        //     url : "/bids/postBid/" + data.data[i].auction_id,
+        //     type: "POST",
+        //     data: JSON.stringify({ "amount": data.data[i].amount, "bidIncrement": data.data[i].bid_increment}),
+        //     contentType: "application/json; charset=utf-8",
+        //     dataType   : "json",
+        //     success    : function(){
+        //         console.log("updated bid");
+        //     }
+        // });
+        //       }   
+        //     });
+        // });
+
+        // $.post("/auctions/updateAuctions", function(data, status){
+        //   // console.log(data);
+        // });
+
+        $.get("/category", function (data, status) {
+          var options = "<option value='' selected disabled hidden>Choose Category</option>";
+          $.each(data, function (i) {
+            var categoryOption = '<option value="' + data[i].name + '" id = "category" ' + data[i].category_id + '>' + data[i].name + '</option>'
+            options += categoryOption;
+          });
+          $('#category').append(options);
+        });
+        $.get("/auctions?isWinner=false", function (data, status) {
+            auctionData = data
+            createCards(data)
         });
       });
+
+      function sortByDate(type){
+        $("#target").empty()
+        console.log(type)
+        if(type == "lh"){
+          var auctionDataCopy = auctionData
+          auctionDataCopy.sort(function(a,b){ 
+            return a.closingDate - b.closingDate;
+            }).reverse();
+          createCards(auctionDataCopy)
+        } else if(type == "hl") {
+          var auctionDataCopy = auctionData
+          auctionDataCopy.sort(function(a,b){ 
+            return a.closingDate - b.closingDate;
+            });
+          createCards(auctionDataCopy)
+        }
+        
+         
+      }
     </script>
 </head>
 
@@ -50,48 +154,69 @@
 </header>
 
 <body>
+  <div class="d-flex justify-content-end pt-5 mt-5">
+    <div class="fixed-right" id="liveAlertPlaceholder"></div>
+  </div>
   <% if( locals.data ) { %>
     <% if( locals.data.alertData ) { %>
-        <div class="d-flex justify-content-end pt-5 mt-5">
-          <div class="fixed-right" id="liveAlertPlaceholder"></div>
-        </div>
-        <script>
-            const createAlert = (message, type) => {
-                const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-                const wrapper = document.createElement('div')
-                wrapper.innerHTML = [
-                    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-                    `   <div>${message}</div>`,
-                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-                    '</div>'
-                ].join('')
-                alertPlaceholder.append(wrapper)
-            };
-            createAlert("<%= data.alertData.message %>", "<%= data.alertData.alertType %>")
-        </script>
-    <% } %>
-<% } %>
-  <div class="d-flex justify-content-lg-center pt-5 mt-5">
-    <div class="input-group w-75">
-      <select class="form-select">
-        <option selected>Choose Category</option>
-        <option value="Category1">Category1</option>
-        <option value="Category2">Category2</option>
-        <option value="Category3">Category3</option>
-      </select>
-      <input type="text" class="form-control w-50" placeholder="Search....." />
-      <button type="submit" class="btn btn-primary">Search</button>
-    </div>
-  </div>
-  <div class="d-flex justify-content-lg-center pt-5">
-    <p class="fs-4">Live Auctions</p>
-  </div>
-  <div class="d-flex justify-content-lg-center pt-5" id="noAuction">
-  </div>
-  <div class="d-flex justify-content-lg-center pt-5">
-    <div class="row row-cols-1 row-cols-md-3 g-4 mx-5 px-5" id="target">
-    </div>
-  </div>
+      <script>
+        createAlert("<%= data.alertData.message %>", "<%= data.alertData.alertType %>")
+      </script>
+      <% } %>
+        <% } %>
+          <div class="d-flex justify-content-lg-center pt-5 mt-5">
+            <div class="input-group w-75 justify-content-lg-center">
+              <center class="w-100">
+                <form class="w-100 form-control " action="/auctions/search" method='POST'>
+                  <div class="mb-5">
+                    <select class="form-select w-25 form-check-inline form-control" id="category" name="category">
+                    </select>
+                    <select class="form-select w-25 form-check-inline form-control" id="color" name="color">
+                      <option value="" selected disabled hidden>Choose Color</option>
+                      <option value=""></option>
+                      <option value="red">Red</option>
+                      <option value="orange">Orange</option>
+                      <option value="yellow">Yellow</option>
+                      <option value="green">Green</option>
+                      <option value="blue">Blue</option>
+                      <option value="indigo">Indigo</option>
+                      <option value="violet">Violet</option>
+                      <option value="black">Black</option>
+                      <option value="white">White</option>
+                    </select>
+                    <br><br>
+                    <input type="text" class="form-control w-50 form-check-inline form-control"
+                      placeholder="Search....." name="brand" />
+                    <br><br>
+                    <button type="submit" class="btn btn-primary w-25">Search</button>
+                  </div>
+                </form>
+              </center>
+            </div>
+          </div>
+          <div class="d-flex justify-content-lg-center pt-5">
+            <p class="fs-4">Live Auctions</p>
+          </div>
+          <div class="d-flex justify-content-lg-center pt-5" id="noAuction">
+          </div>
+          <div class="d-flex pt-5 px-5" id="sortStuff">
+            <!-- <div class="form-check px-2">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onchange="sortByDate('hl')">
+              <label class="form-check-label" for="flexRadioDefault1">
+                Sort By Closing Date: Most Recent
+              </label>
+            </div> -->
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onchange="sortByDate('lh')">
+              <label class="form-check-label" for="flexRadioDefault2">
+                Sort By Closing Date: Earliest Closing
+              </label>
+            </div>
+          </div>
+          <div class="d-flex justify-content-lg-center pt-5">
+            <div class="row row-cols-1 row-cols-md-3 g-4 mx-5 px-5" id="target">
+            </div>
+          </div>
 
 </body>
 

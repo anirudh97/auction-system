@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+    <div class="container pt-5 mt-5">
+     <center><h3>Created Auctions</h3></center><p></p>
+    <table class="table table-bordered" style="table-layout:fixed;">
+        <thead class="thead" style="background-color: #0d6efd; color: white">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Item: Item Category</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Link</th>       
+          </tr>
+        </thead>
+        <tbody>
+          <% for(var i=0; i<data.createdAuction.length; i++) {%>
+            <form method="GET" action="/auctions/<%= data.createdAuction[i].auction_id %>">
+              <tr>
+                <th scope="row"><%= i+1 %></th>
+                <td><%= data.createdAuction[i].category %> : <%= data.createdAuction[i].type %></td>
+                <td><%= data.createdAuction[i].brand %></td>
+                <td><button type="submit" class="btn btn-primary ">Go to Auction</button></td>
+              </tr>
+            </form>
+          <% } %>
+        </tbody>
+      </table>
+
+      <center><h3>Bidded Auctions</h3> </center><p></p>
+      <table class="table table-bordered" style="table-layout:fixed;">
+        <thead class="thead" style="background-color: #0d6efd; color: white">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Item: Item Category</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Link</th>       
+          </tr>
+        </thead>
+        <tbody>
+          <% for(var i=0; i<data.bidAuction.length; i++) {%>
+            <form method="GET" action="/auctions/<%= data.bidAuction[i].auction_id %>">
+              <tr>
+                <th scope="row"><%= i+1 %></th>
+                <td><%= data.bidAuction[i].category %> : <%= data.bidAuction[i].type %></td>
+                <td><%= data.bidAuction[i].brand %></td>
+                <td><button type="submit" class="btn btn-primary ">Go to Auction</button></td>
+              </tr>
+            </form>
+          <% } %>
+        </tbody>
+      </table>
+
+    </div>
+</body>
+</html>

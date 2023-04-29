@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<style>
+  .container_carousel {
+    float: right;
+    float: top;
+    height: 600px;
+    width: 600px;
+  }
+
+  .table {
+    width: 100%;
+  }
+</style>
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+  <div class="container pt-2 mt-5">
+    <div class="row mt-5">
+      <div class="col pt-2 mt-5">
+        <table class="table table-striped ">
+          <form method="POST" action="/bids/postBid/<%=data.auctionId%>" id="postBidForm">
+            <tbody>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white; width: 33% ">Item</th>
+                <td>
+                  <%= data.category %> : <%= data.type %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Color</th>
+                <td>
+                  <%= data.color %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Brand</th>
+                <td>
+                  <%= data.brand %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Current Price</th>
+                <td>
+                  $<input type="text" name="amount" readonly value="<%= data.amount %>">
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Closing Date and Time</th>
+                <td>
+                  <%= data.closingDate %>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" style="background-color: #0d6efd; color: white">Bid Increment</th>
+                <td>$<input type="text" name="bidIncrement" value="<%= data.bidIncrement %>" readonly>
+                </td>
+              </tr>
+            </tbody>
+          </form>
+        </table>
+        <div class="mt-2 ">
+          <% if(data.email==data.user){ %>
+            <h5>You created the Auction. Cannot bid.</h5>
+            <% } else if(data.winner=="NA" && data.isAutoBid==false){ %>
+              <% if(data.bids.length > 0 && data.bids[0].email == data.user){ %>
+                <h5>You are the highest bidder.</h5>
+                <% } else{ %>
+                  <div class="d-flex justify-content-lg-center pt-2">
+                    <button type="button" class="btn btn-primary w-50"
+                      onclick="document.getElementById('postBidForm').submit()">Post Bid</button>
+                  </div>
+                  <p></p>
+                  <form action="/bids/createAutoBid/<%=data.auctionId%>" method="POST">
+                    <h5>Set Upper Limit</h5>
+                    <div class="form-floating mb-1">
+                      Bid Increment: $<input type="text" class="" name="bidIncrement" value="<%= data.bidIncrement %>"
+                        readonly>
+                    </div>
+                    <div class="form-floating mb-1">
+                      <input type="text" class="form-control" placeholder="u_limit" name="upperLimit" required>
+                      <label for="floatingEmail">Upper Limit</label>
+                    </div>
+                    <div class="d-flex justify-content-lg-center pt-3">
+                      <button type="submit" class="btn btn-primary w-50">Set Auto Bid</button>
+                    </div>
+                  </form>
+                  <% }
+                %>
+                <% } else if(data.winner=="NA" && data.isAutoBid==true){ %>
+                    <h5>Auto bid enabled for this auction.</h5>
+                    <% if(data.bids.length > 0 && data.bids[0].email == data.user){ %>
+                      <h5>You are the highest bidder.</h5>
+                      <% }%>
+                <% } else if(data.winner != "NA" &&  data.winner != "NW"){ %>
+                    <% if(data.winner==data.user){ %>
+                      <h5>You are the winner of this auction.</h5>
+                      <% }else { %>
+                        <h5>Auction won by: <%= data.winner %></h5>
+                        <% } %>
+                <% } else if(data.winner == "NW"){ %>
+                      <h5>Auction over. No winner, auction winner did not get the desired price.</h5>
+                  <% }
+            %>
+        </div>
+      </div>
+      <div class="col">
+        <div class="container_carousel pt-1 mt-5">
+          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <% for(var i=0; i<data.imagePaths.length; i++) {%>
+                <div class="carousel-item active">
+                  <img src="<%= data.imagePaths[i] %>" class="d-block w-100" alt="...">
+                </div>
+                <% } %>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="prev">
+              <span class="fa fa-angle-left fa-2x" style="color:black" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="next">
+              <span class="fa fa-angle-right fa-2x" style="color:black" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container pt-2 mt-5">
+    <center><h3>Bids placed so far.</h3> </center>
+    <table class="table table-bordered" style="table-layout:fixed;">
+      <thead class="thead" style="background-color: #0d6efd; color: white">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Bid User</th>
+          <th scope="col">Bid Timestamp</th>
+          <th scope="col">Amount</th>  
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i=0; i<data.bids.length; i++) {%>
+            <tr>
+              <th scope="row"><%= i+1 %></th>
+              <td><%= data.bids[i].email %></td>
+              <td><%= data.bids[i].bid_timestamp %></td>
+              <td><%= data.bids[i].amount %></td>
+            </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

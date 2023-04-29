@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+    <div class="d-flex justify-content-lg-center pt-5 mt-5">
+        <div class="w-25">
+            <center><h3>Add a New Item to Watchlist</h3></center>
+            <form action="/watchlist/addWatchlist" method="POST" id="createWatchlistForm">
+                <div class="d-flex justify-content-lg-center mt-3 mb-3">
+                  <select class="form-select" aria-label="Default select example" name="category">
+                      <option selected>Item Category</option>
+                      <option value="caps">Caps</option>
+                      <option value="sunglasses">Sunglasses</option>
+                      <option value="wristwatch">Wristwatch</option>
+                    </select>
+              </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingBrand" placeholder="Brand" name="brand">
+                    <label for="floatingBrand">Brand</label>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingColor" placeholder="Color" name="color">
+                    <label for="floatingColor">Color</label>
+                </div>
+                <div class="d-flex justify-content-lg-center mt-3">
+                    <button type="submit" class="btn btn-primary w-100">Add to Watchlist</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container pt-4 mt-4">
+        <center><h3>Current Items in  Watchlist</h3></center><p></p>
+        <table class="table table-bordered" style="table-layout:fixed;">
+            <thead class="thead" style="background-color: #0d6efd; color: white">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Item Category</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Color</th>
+                <th scope="col">Delete Watchlist</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=0; i<data.data.length; i++) {%>
+                <tr>
+                  <th scope="row"><%= i+1 %></th>
+                  <td><%= data.data[i].category %></td>
+                  <td><%= data.data[i].brand %></td>
+                  <td><%= data.data[i].color %></td>
+                  <td><form action="/watchlist/deleteWatchlist/<%= data.data[i].watchlist_id%>" method="POST"><button class="btn btn-secondary" type="submit">Delete</button></form></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+</body>
+</html>

@@ -8,6 +8,52 @@ const User = function (user) {
 	this.type = user.type;
 }
 
+User.resetUser = (newUser, result) => {
+	console.log("Model: User: resetUser: Invoked !");
+
+	sqlQuery = "UPDATE end_user SET password = ? WHERE email = ?";
+	bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
+		if (hashErr) {
+			console.log("Model: User: create: Error in hashing password !: ", hashErr)
+			result({ "message": hashErr }, null)
+		};
+
+		sql.query(sqlQuery, [hash, newUser.email], (err, res) => {
+			if (err) {
+				console.log("Model: User: resetUser: Error !: ", err)
+				result({ "message": err }, null);
+			};
+			result(null, { id: res.insertId, "user": newUser.email });
+		});
+	});
+
+};
+
+User.getUsers = (result) => {
+	console.log("Model: User: getUsers: Invoked !");
+	sqlQuery = "select email from end_user";
+	sql.query(sqlQuery, (err, res) => {
+		if(err){
+			console.log("Model: User: getUsers: Error !: ", err)
+			result({ "message": err });
+		} else{
+			result(null, res);
+		}
+	});
+}
+User.deleteUser = (email, result) => {
+	console.log("Model: User: deleteUser: Invoked !");
+
+	sqlQuery = "DELETE FROM end_user WHERE email = " + sql.escape(email);
+	sql.query(sqlQuery, (err, res) => {
+		if(err){
+			console.log("Model: User: deleteUser: Error !: ", err)
+			result({ "message": err });
+		} else{
+			result(null, res);
+		}
+	});
+};
 User.create = (newUser, result) => {
 	console.log("Model: User: create: Invoked !");
 
@@ -43,7 +89,7 @@ User.create = (newUser, result) => {
 						result({ "message": err }, null);
 					};
 					// console.log("Model: User: create: User Added: ", {id: res.insertId, "user": newUser.email, "password": hash, "type": newUser.type});
-					result(null, { id: res.insertId, "user": newUser.email, "type": newUser.type })
+					result(null, { id: res.insertId, "user": newUser.email, "type": newUser.type });
 				});
 			});
 		};

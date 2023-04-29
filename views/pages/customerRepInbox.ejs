@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<header>
+    <%- include('../partials/customerRepHeader'); %>
+</header>
+<style>
+    .container_carousel {
+        float: right;
+        float: top;
+        height: 600px;
+        width: 600px;
+    }
+
+    .table {
+        width: 100%;
+    }
+</style>
+
+<body>
+    <div class="container pt-2 mt-2">
+        <% if( locals.data ) { %>
+            <% if( locals.data.alertData ) { %>
+                <div class="d-flex justify-content-end pt-5 mt-5">
+                  <div class="fixed-right" id="liveAlertPlaceholder"></div>
+                </div>
+                <script>
+                    const createAlert = (message, type) => {
+                        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+                        const wrapper = document.createElement('div')
+                        wrapper.innerHTML = [
+                            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                            `   <div>${message}</div>`,
+                            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                            '</div>'
+                        ].join('')
+                        alertPlaceholder.append(wrapper)
+                    };
+                    createAlert("<%= data.alertData.message %>", "<%= data.alertData.alertType %>")
+                </script>
+            <% } %>
+        <% } %>
+        <div class="container pt-5 mt-2">
+            <center>
+                <h3>Inbox</h3>
+                <% for(var i=0; i<questions.length; i++) {%>
+                    <div class="border border-3 border-dark p-3 mb-2 w-50">
+                        <form action="/questions/postAnswer/<%=questions[i].questionId%>" method="POST" id="question<%=questions[i].questionId%>">
+                            <h5><%=questions[i].questionText%></h5>
+                            <% if(questions[i].answers.length==0){ %>
+                                <b>Question has not been answered yet.</b>
+                                <% } else{ %>
+                              <% for(var j=0; j<questions[i].answers.length; j++) {%>
+                                <h6>Answer <%= j+1 %>: <%= questions[i].answers[j] %></h6>
+                              <% } %>
+                            <% } %>
+                            <div class="form-floating mb-1">
+                                <input type="text" class="form-control" id="answer" placeholder="Answer" name="answer"
+                                    required>
+                                <label for="floatingEmail">Enter Answer</label>
+                            </div>
+                            <div class="d-flex justify-content-lg-center pt-3">
+                                <button type="submit" class="btn btn-primary w-25">Post Answer</button>
+                            </div>
+                        </form>
+                    </div>
+                <% } %>
+            </center>
+        </div>
+    </div>
+
+</body>
+
+</html>

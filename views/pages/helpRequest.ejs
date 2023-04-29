@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<body>
+  <div class="container pt-2 mt-5">
+    <h3>Search for a Question using a Key Word</h3>
+    <form class="w-100 form-control " action="/questions/search" method='GET'>
+    <input type="text" class="form-control w-50 form-check-inline form-control"
+                      placeholder="Search for a question....." />
+        <br><br>
+        <button type="submit" class="btn btn-primary w-25">Search</button>
+        </div>
+    </form>
+  </div>
+  <div class="container pt-2 mt-5">
+    <div class="row mt-5 pt-2">
+      <div class="col pt-2">
+        <center>
+          <h3>Answered Queries</h3>
+        </center>
+        <p></p>
+        <table class="table table-bordered" style="table-layout:fixed;">
+          <thead class="thead" style="background-color: #0d6efd; color: white">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Question</th>
+              <th scope="col">Answers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i=0; i<data.questions.length; i++) {%>
+              <tr>
+                <th scope="row">
+                  <%= i+1 %>
+                </th>
+                <td>
+                  <%= data.questions[i].questionText %>
+                </td>
+                <td>
+                  <% if(data.questions[i].answers.length==0){ %>
+                    <b>Question has not been answered yet.</b>
+                    <% } else{ %>
+                      <% for(var j=0; j<data.questions[i].answers.length; j++) {%>
+                        Answer <%= j+1 %>: <%= data.questions[i].answers[j] %> <br>
+                            <% } %>
+                              <% } %>
+                </td>
+              </tr>
+              <% } %>
+          </tbody>
+        </table>
+
+
+      </div>
+      <div class="col pt-2">
+        <h3>Type in your Question:</h3>
+        <div class="p-3 mb-2 w-80">
+          <form action="/questions/createQuestion" method="POST">
+
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control" id="question" placeholder="question" name="question" required>
+              <label for="floatingEmail">Enter Question</label>
+            </div>
+            <div class="d-flex justify-content-lg-center pt-3">
+              <button type="submit" class="btn btn-primary w-25">Post Question</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+
+
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<header>
+  <%- include('../partials/customerRepHeader'); %>
+</header>
+
+<body>
+
+  <div class="container pt-4 mt-4">
+    <center>
+      <h3>Manage Auctions</h3>
+    </center>
+    <% for(var i=0; i<data.length; i++) {%>
+      <table class="table table-bordered">
+        <thead style="background-color: #0d6efd; color: white">
+          <tr>
+            <th scope="col">Auction Id</th>
+            <th scope="col">Auction owner email</th>
+            <th scope="col">Category: Model</th>
+            <th scope="col">Delete Auction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><%= data[i].auctionId%></th>
+            <td><%= data[i].auctionEmail%></td>
+            <td><%= data[i].category%>: <%= data[i].model%></td>
+            <form method="POST" action="/auctions/deleteAuction/<%= data[i].auctionId%>">
+              <td><button type="submit" class="btn btn-primary w-50">Delete Auction</button></td>
+            </form>
+            
+            <table class='table table-bordered'>
+              <thead style="background-color: #858b96; color: white">
+                <tr>
+                  <th scope="col">Auction Id</th>
+                  <th scope="col">Bid Id</th>
+                  <th scope="col">Bidder email</th>
+                  <th scope="col">Delete Bid</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(data[i].bids.length==0){ %>
+                  <b>No Bids.</b>
+                <% } else { %>
+                  <% for(var j=0; j<data[i].bids.length; j++) {%>
+                    <tr>
+                      <th scope="row"><%= data[i].auctionId%></th>
+                      <td><%= data[i].bids[j].bidId%></td>
+                      <td><%= data[i].bids[j].bidderEmail%></td>
+                      <form method="POST" action="/auctions/deleteBid/<%= data[i].auctionId%>/<%= data[i].bids[j].bidId%>">
+                        <td><button type="submit" class="btn btn-secondary w-50">Delete Bid</button></td>
+                      </form>
+                    </tr>
+                  <% } %>
+                <% } %>
+              </tbody>
+            </table>
+            <!-- -------------------------------------------------- -->
+          </tr>
+        </tbody>
+      </table>
+
+      <center>
+        <p>**************************************</p>
+      </center>
+    <% } %>
+  </div>
+</body>
+
+</html>

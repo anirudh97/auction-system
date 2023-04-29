@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+    
+  <div class="container pt-2 mt-5">
+    <center><h3>Site Wide Sales.</h3> </center>
+    <table class="table table-bordered" style="table-layout:fixed;">
+      <thead class="thead" style="background-color: #0d6efd; color: white">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Total Earnings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i=0; i<data.length; i++) {%>
+            <tr>
+              <th scope="row"><%= i+1 %></th>
+              <td><%= data[i].total_sales %></td>
+            </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

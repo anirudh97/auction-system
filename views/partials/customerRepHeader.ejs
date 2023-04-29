@@ -1,0 +1,74 @@
+<style>
+    div:hover #logo {
+        cursor: pointer;
+    }
+
+    div:hover #resetPasswordForm {
+        cursor: pointer;
+    }
+    div:hover #manageAuctions {
+        cursor: pointer;
+    }
+    div:hover #answerQueriesForm{
+        cursor: pointer;
+    }
+    div:hover #logoutForm{
+        cursor: pointer;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg bg-primary fixed-top">
+    <div class="container-fluid">
+        <form action="/custRepHome" method="GET" id="homeForm">
+            <div class="" id="logo" onclick="document.getElementById('homeForm').submit();">
+                <i class="fa-solid fa-cart-shopping fa-xl" style="color: #fff;"></i>
+                <span style="color: #fff;" class="fs-4">BuyMe</span>
+            </div>
+        </form>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item" style="margin-left: 25px;">
+                    <form action="/auctions/allDetails" method="GET" id="manageAuctions">
+                        <div id="manageAuction" onclick="document.getElementById('manageAuctions').submit();">
+                            <a class="nav-link" style="color: #fff;">Manage Auctions</a>
+                        </div>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form action="/customerRep/resetUser" method="GET" id="resetPasswordForm">
+                        <div id="resetPassword" onclick="document.getElementById('resetPasswordForm').submit();">
+                            <a class="nav-link" style="color: #fff;">Reset User Credentials</a>
+                        </div>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form action="/custRepHome" method="GET" id="answerQueriesForm">
+                        <div id="answerQueries" onclick="document.getElementById('answerQueriesForm').submit();">
+                            <a class="nav-link" style="color: #fff;">Answer Queries</a>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+            <span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false"><%=user%>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <form action="/logout" method="GET" id="logoutForm">
+                                <div id="createAuction" onclick="document.getElementById('logoutForm').submit();">
+                                    <a class="dropdown-item">Logout</a>
+                                </div>
+                            </form>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                    </ul>
+                </div>
+            </span>
+        </div>
+    </div>
+
+</nav>

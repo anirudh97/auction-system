@@ -11,7 +11,7 @@ router.get('/new', (req, res) => {
         res.redirect('/');
     }
     else{
-        res.render('pages/createAuction');
+        res.render('pages/createAuction', {"data": {"user": req.session.user}});
     };
 })
 
@@ -28,7 +28,20 @@ var upload = multer({ storage: storage });
 
 router.post('/new', upload.array('multi-files'), auctions.create);
 
-router.get('/:auctionId', auctions.getAuction);
+router.get('/myAuctions', auctions.getMyAuctions);
+
+router.get('/allDetails', auctions.getDetails);
+
+router.get('/:auctionId(\\d+)', auctions.getAuction);
+
+router.post('/deleteBid/:auctionId/:bidId', auctions.deleteBid);
+
+router.post('/deleteAuction/:auctionId', auctions.deleteAuction);
+
+router.post('/updateAuctions', auctions.updateAuctions);
+
+router.post('/search', auctions.search);
+
 
 
 
