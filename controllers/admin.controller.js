@@ -2,62 +2,76 @@ const User = require('../models/users.model.js');
 const Category = require('../models/category.model.js');
 const Admin = require('../models/admin.model');
 
-exports.report1 = (req, res) => {
-	Admin.report1((err, data) => {
+exports.categorySale = (req, res) => {
+	Admin.categorySale((err, data) => {
 		if (err) {
 			res.status(500).send({
                 message:
-                    err.message || "Controller: Admin: report1: Error occured."
+                    err.message || "Controller: Admin: categorySale: Error occured."
             });
 		}
 		else {
-			console.log("Controller: Admin: report1: retreived report Successfully!")
-			res.render('pages/report1', data);
+			console.log("Controller: Admin: categorySale: retreived report Successfully!")
+			res.render('pages/categoryWiseSales.ejs', {"data": data});
 		}
 	});
 };
 
-exports.report1 = (req, res) => {
-	Admin.report1((err, data) => {
+exports.userEarnings = (req, res) => {
+	Admin.userEarnings((err, data) => {
 		if (err) {
 			res.status(500).send({
                 message:
-                    err.message || "Controller: Admin: report1: Error occured."
+                    err.message || "Controller: Admin: userEarnings: Error occured."
             });
 		}
 		else {
-			console.log("Controller: Admin: report1: retreived report Successfully!")
-			res.render('pages/report1', data);
+			console.log("Controller: Admin: userEarnings: retreived report Successfully!")
+			res.render('pages/userEarnings', {"data": data});
 		}
 	});
 };
 
-exports.report1 = (req, res) => {
-	Admin.report1((err, data) => {
+exports.siteWideTotalSales = (req, res) => {
+	Admin.siteWideTotalSales((err, data) => {
 		if (err) {
 			res.status(500).send({
                 message:
-                    err.message || "Controller: Admin: report1: Error occured."
+                    err.message || "Controller: Admin: bestSellingItems: Error occured."
             });
 		}
 		else {
-			console.log("Controller: Admin: report1: retreived report Successfully!")
-			res.render('pages/report1', data);
+			console.log("Controller: Admin: siteWideTotalSales: retreived report Successfully!")
+			res.render('pages/siteWideTotalSales', {"data": data});
 		}
 	});
 };
 
-exports.report1 = (req, res) => {
-	Admin.report1((err, data) => {
+exports.bestSellingItems = (req, res) => {
+	Admin.bestSellingItems((err, data) => {
 		if (err) {
 			res.status(500).send({
                 message:
-                    err.message || "Controller: Admin: report1: Error occured."
+                    err.message || "Controller: Admin: bestSellingItems: Error occured."
             });
 		}
 		else {
-			console.log("Controller: Admin: report1: retreived report Successfully!")
-			res.render('pages/report1', data);
+			console.log("Controller: Admin: bestSellingItems: retreived report Successfully!")
+			res.render('pages/bestSellingItems', {"data": data});
+		}
+	});
+};
+exports.userWithMostSpending = (req, res) => {
+	Admin.userWithMostSpending((err, data) => {
+		if (err) {
+			res.status(500).send({
+                message:
+                    err.message || "Controller: Admin: userWithMostSpending: Error occured."
+            });
+		}
+		else {
+			console.log("Controller: Admin: userWithMostSpending: retreived report Successfully!")
+			res.render('pages/userWithMostSpending', {"data": data});
 		}
 	});
 };

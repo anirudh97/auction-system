@@ -4,37 +4,29 @@
 <head>
   <%- include('../partials/head'); %>
 </head>
-<body>
-    <div class="container pt-4 mt-4">
-        <center><h3>Statistics</h3><p></p>
-        <table class="table table-bordered" style="table-layout:fixed;">
-            <thead class="thead" style="background-color: #0d6efd; color: white">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">User Email</th>
-                <th scope="col">Total Spending</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-              </tr>
-            </tbody>
-          </table>
 
-          
-        </div>
+<body>
+    
+  <div class="container pt-2 mt-5">
+    <center><h3>Total User Earnings.</h3> </center>
+    <table class="table table-bordered" style="table-layout:fixed;">
+      <thead class="thead" style="background-color: #0d6efd; color: white">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Email</th>
+          <th scope="col">Total Earnings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i=0; i<data.length; i++) {%>
+            <tr>
+              <th scope="row"><%= i+1 %></th>
+              <td><%= data[i].email %></td>
+              <td><%= data[i].total_user_earnings %></td>
+            </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

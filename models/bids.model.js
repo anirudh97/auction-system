@@ -26,7 +26,8 @@ Bid.deleteAutoBid = (email, auctionId, result) => {
 }
 
 Bid.postBid = (bid, result) => {
-    console.log("Model: Bids: postBid: Invoked !");
+    // console.log("Model: Bids: postBid: Invoked !");
+    // console.log(bid)
     sqlQuery = "INSERT INTO bid (auction_id, email, bid_timestamp, amount) VALUES(?, ?, ?, ?)";
 
     sql.query(sqlQuery, [bid.auctionId, bid.email, bid.bidTimestamp, bid.amount], (err, res) => {
@@ -106,7 +107,7 @@ Bid.checkUpperLimit = (email, result) => {
 };
 
 Bid.postAutoBid = (email, result) => {
-    console.log("Model: Bids: postAutoBid: Invoked !");
+    // console.log("Model: Bids: postAutoBid: Invoked !");
     var datetime = new Date();
     currentDate = datetime.toISOString().slice(0,10);
 
@@ -118,8 +119,9 @@ Bid.postAutoBid = (email, result) => {
 			return;
         }
         else{
-            console.log("Model: Bids: postAutoBid: retreived autobid auction ids");
-            result(null,res);
+            // console.log("Model: Bids: postAutoBid: retreived autobid auction ids");
+
+            result(null,{"res": res, "email": email});
         };
     });
 };

@@ -92,7 +92,7 @@
             <div class="w-100">
                 <form action="/admin/addCategory" method="POST" id="newCategory">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="newCategory" placeholder="New Category"
+                        <input type="text" class="form-control" id="categoryName" placeholder="New Category"
                             name="categoryName" required>
                         <label for="floatingEmail">New Category</label>
                     </div>
@@ -112,11 +112,11 @@
               Select Statistic Report 
             </button>
             <ul class="dropdown-menu">
-                <li><form method="GET" action="/categoryWiseSales" class="dropdown-item" id="categoryWiseSales">Category-wise Sales</form></li>
-                <li><form method="GET" action="/userEarnings" class="dropdown-item" id="userEarnings">User Earnings</form></li> 
-                <li><form method="GET" action="/siteWideTotalSales" class="dropdown-item" id="siteWideTotalSales">Site-wide Total Sales</form></li>
-                <li><form method="GET" action="/bestSellingItems" class="dropdown-item" id="bestSellingItems">Best Selling Items</form></li>                                  
-                <li><form method="GET" action="/userMostSpending" class="dropdown-item" id="userMostSpending">User with most Spending</form></li>                                         
+                <li onclick="categoryWiseSales.submit();"><form method="GET" action="/admin/categorySale" class="dropdown-item" id="categoryWiseSales">Category-wise Sales</form></li>
+                <li onclick="userEarnings.submit();"><form method="GET" action="/admin/userEarnings" class="dropdown-item" id="userEarnings">User Earnings</form></li> 
+                <li onclick="siteWideTotalSales.submit();"><form method="GET" action="/admin/siteWideTotalSales" class="dropdown-item" id="siteWideTotalSales">Site-wide Total Sales</form></li>
+                <li onclick="bestSellingItems.submit();"><form method="GET" action="/admin/bestSellingItems" class="dropdown-item" id="bestSellingItems">Best Selling Items</form></li>                                  
+                <li onclick="userMostSpending.submit();"><form method="GET" action="/admin/userWithMostSpending" class="dropdown-item" id="userMostSpending">User with most Spending</form></li>                                         
             </ul>
           </div>
     </div>

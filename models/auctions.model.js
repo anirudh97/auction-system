@@ -204,7 +204,7 @@ Auction.getAuction = (auctionId, email, result) => {
                     return;
                 }
                 else{
-                    sqlQueryBid = "SELECT email FROM bid WHERE auction_id = " + sql.escape(auctionId) + " ORDER BY bid_timestamp DESC LIMIT 1;";
+                    sqlQueryBid = "SELECT bid_id, email, bid_timestamp, amount FROM bid WHERE auction_id = " + sql.escape(auctionId) + " ORDER BY bid_timestamp DESC;";
                     sql.query(sqlQueryBid, (errBid, resBid) => {
                         if(errBid){
                             console.log("Model: Auction: getAuction: Error in getting highest bid: ", errBid);
@@ -212,9 +212,9 @@ Auction.getAuction = (auctionId, email, result) => {
                             return;
                         } else{
                             if (resAutoBid.length > 0){
-                                result(null, {"auctionDetails": res, "isAutoBid": true, "highestBid": resBid});
+                                result(null, {"auctionDetails": res, "isAutoBid": true, "bids": resBid});
                             }else{
-                                result(null, {"auctionDetails": res, "isAutoBid": false, "highestBid": resBid});
+                                result(null, {"auctionDetails": res, "isAutoBid": false, "bids": resBid});
                             };
                         }
                     })

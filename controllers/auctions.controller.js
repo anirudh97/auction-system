@@ -230,7 +230,7 @@ exports.getAuction = (req, res) => {
                                 "isAutoBid": data.isAutoBid,
                                 "user": req.session.user,
                                 "winner": data.auctionDetails[i].winner,
-                                "highestBid": data.highestBid
+                                "bids": data.bids
                             };
 
                             already_seen_items.add(data.auctionDetails[i].item_id);

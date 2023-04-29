@@ -7,40 +7,30 @@
 
 <body>
     
-    <div class="container pt-4 mt-4">
-        <center><h3>Statistics</h3><p></p>
-        <table class="table table-bordered" style="table-layout:fixed;">
-            <thead class="thead" style="background-color: #0d6efd; color: white">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Category</th>
-                <th scope="col">Brand</th>
-                <th scope="col">Model</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Otto</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>Otto</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>Otto</td>
-              </tr>
-            </tbody>
-          </table>
-
-          
-        </div>
+  <div class="container pt-2 mt-5">
+    <center><h3>Best Selling Items.</h3> </center>
+    <table class="table table-bordered" style="table-layout:fixed;">
+      <thead class="thead" style="background-color: #0d6efd; color: white">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Category</th>
+          <th scope="col">Brand</th>
+          <th scope="col">Model</th>
+          <th scope="col">Profit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i=0; i<data.length; i++) {%>
+            <tr>
+              <th scope="row"><%= i+1 %></th>
+              <td><%= data[i].category %></td>
+              <td><%= data[i].brand %></td>
+              <td><%= data[i].model %></td>
+              <td><%= data[i].profit %></td>
+            </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

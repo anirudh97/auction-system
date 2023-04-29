@@ -72,15 +72,16 @@ User.getUsers( async (err, users) => {
   } else {
     for (var i = 0; i < users.length; i++) {
       var user = users[i].email;
-      Bids.postAutoBid(users[i].email, (err, postAutoBidData) => {
+      Bids.postAutoBid(user, (err, postAutoBidData) => {
         if (err) {
           console.log("Error getting postAutoBid data: ", err)
           exit(1)
         } else {
-          for (var j = 0; j < postAutoBidData.length; j++) {
+          for (var j = 0; j < postAutoBidData.res.length; j++) {
             var timestamp = new Date();
-            if (postAutoBidData[j].bidder_email != user) {
-              Bids.postBid({ "auctionId": postAutoBidData[j].auction_id, "email": user, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData[j].amount) + parseInt(postAutoBidData[j].bid_increment) }, (err, postBidData) => {
+            timestamp = timestamp.toISOString().split('T')[0]
+            if (postAutoBidData.res[j].bidder_email != postAutoBidData.email) {
+              Bids.postBid({ "auctionId": postAutoBidData.res[j].auction_id, "email": postAutoBidData.email, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData.res[j].amount) + parseInt(postAutoBidData.res[j].bid_increment) }, (err, postBidData) => {
                 if (err) {
                   console.log("Error in posting bid: ", err);
                   exit(1)
@@ -95,21 +96,22 @@ User.getUsers( async (err, users) => {
 });
 
 setInterval( async () => {
-  User.getUsers((err, users) => {
+  User.getUsers( async (err, users) => {
     if (err) {
       console.log("Error getting users: ", err)
     } else {
       for (var i = 0; i < users.length; i++) {
         var user = users[i].email;
-        Bids.postAutoBid(users[i].email, (err, postAutoBidData) => {
+        Bids.postAutoBid(user, (err, postAutoBidData) => {
           if (err) {
             console.log("Error getting postAutoBid data: ", err)
             exit(1)
           } else {
-            for (var j = 0; j < postAutoBidData.length; j++) {
+            for (var j = 0; j < postAutoBidData.res.length; j++) {
               var timestamp = new Date();
-              if (postAutoBidData[j].bidder_email != user) {
-                Bids.postBid({ "auctionId": postAutoBidData[j].auction_id, "email": user, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData[j].amount) + parseInt(postAutoBidData[j].bid_increment) }, (err, postBidData) => {
+              timestamp = timestamp.toISOString().split('T')[0]
+              if (postAutoBidData.res[j].bidder_email != postAutoBidData.email) {
+                Bids.postBid({ "auctionId": postAutoBidData.res[j].auction_id, "email": postAutoBidData.email, "bidTimestamp": timestamp, "amount": parseInt(postAutoBidData.res[j].amount) + parseInt(postAutoBidData.res[j].bid_increment) }, (err, postBidData) => {
                   if (err) {
                     console.log("Error in posting bid: ", err);
                     exit(1)
@@ -122,5 +124,5 @@ setInterval( async () => {
       }
     };
   });
-}, 10000)
+  }, 10000)
 

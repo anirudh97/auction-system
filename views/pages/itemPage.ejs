@@ -69,39 +69,46 @@
         <div class="mt-2 ">
           <% if(data.email==data.user){ %>
             <h5>You created the Auction. Cannot bid.</h5>
-            <% } else if(data.highestBid.length > 0 && data.highestBid[0].email == data.user) {%> 
+            <% } else if(data.winner=="NA" && data.isAutoBid==false){ %>
+              <% if(data.bids.length > 0 && data.bids[0].email == data.user){ %>
                 <h5>You are the highest bidder.</h5>
-              <%} else{ %>
-
-              <% if(data.winner=="NA" && data.isAutoBid==false){ %>
-                <div class="d-flex justify-content-lg-center pt-2">
-                  <button type="button" class="btn btn-primary w-50"
-                    onclick="document.getElementById('postBidForm').submit()">Post Bid</button>
-                </div>
-                <p></p>
-                <form action="/bids/createAutoBid/<%=data.auctionId%>" method="POST">
-                  <h5>Set Upper Limit</h5>
-                  <div class="form-floating mb-1">
-                    Bid Increment: $<input type="text" class="" name="bidIncrement" value="<%= data.bidIncrement %>"
-                      readonly>
+                <% } else{ %>
+                  <div class="d-flex justify-content-lg-center pt-2">
+                    <button type="button" class="btn btn-primary w-50"
+                      onclick="document.getElementById('postBidForm').submit()">Post Bid</button>
                   </div>
-                  <div class="form-floating mb-1">
-                    <input type="text" class="form-control" placeholder="u_limit" name="upperLimit" required>
-                    <label for="floatingEmail">Upper Limit</label>
-                  </div>
-                  <div class="d-flex justify-content-lg-center pt-3">
-                    <button type="submit" class="btn btn-primary w-50">Set Auto Bid</button>
-                  </div>
-                </form>
-                <% } else if(data.isAutoBid==true) {%>
-                  <h5>Auto bid enabled for this auction.</h5>
-                  <%} else if(data.winner==data.user){ %>
-                    <h5>You are the winner of this auction.</h5>
-                    <% }else{ %>
-                      <h5>Auction is over.</h5>
-                      <% } %>
-
+                  <p></p>
+                  <form action="/bids/createAutoBid/<%=data.auctionId%>" method="POST">
+                    <h5>Set Upper Limit</h5>
+                    <div class="form-floating mb-1">
+                      Bid Increment: $<input type="text" class="" name="bidIncrement" value="<%= data.bidIncrement %>"
+                        readonly>
+                    </div>
+                    <div class="form-floating mb-1">
+                      <input type="text" class="form-control" placeholder="u_limit" name="upperLimit" required>
+                      <label for="floatingEmail">Upper Limit</label>
+                    </div>
+                    <div class="d-flex justify-content-lg-center pt-3">
+                      <button type="submit" class="btn btn-primary w-50">Set Auto Bid</button>
+                    </div>
+                  </form>
+                  <% }
+                %>
+                <% } else if(data.winner=="NA" && data.isAutoBid==true){ %>
+                    <h5>Auto bid enabled for this auction.</h5>
+                    <% if(data.bids.length > 0 && data.bids[0].email == data.user){ %>
+                      <h5>You are the highest bidder.</h5>
+                      <% }%>
+                <% } else if(data.winner != "NA" &&  data.winner != "NW"){ %>
+                    <% if(data.winner==data.user){ %>
+                      <h5>You are the winner of this auction.</h5>
+                      <% }else { %>
+                        <h5>Auction won by: <%= data.winner %></h5>
                         <% } %>
+                <% } else if(data.winner == "NW"){ %>
+                      <h5>Auction over. No winner, auction winner did not get the desired price.</h5>
+                  <% }
+            %>
         </div>
       </div>
       <div class="col">
@@ -136,6 +143,29 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="container pt-2 mt-5">
+    <center><h3>Bids placed so far.</h3> </center>
+    <table class="table table-bordered" style="table-layout:fixed;">
+      <thead class="thead" style="background-color: #0d6efd; color: white">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Bid User</th>
+          <th scope="col">Bid Timestamp</th>
+          <th scope="col">Amount</th>  
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i=0; i<data.bids.length; i++) {%>
+            <tr>
+              <th scope="row"><%= i+1 %></th>
+              <td><%= data.bids[i].email %></td>
+              <td><%= data.bids[i].bid_timestamp %></td>
+              <td><%= data.bids[i].amount %></td>
+            </tr>
+        <% } %>
+      </tbody>
+    </table>
   </div>
 </body>
 
