@@ -24,6 +24,17 @@
 - Yash Santosh Khasgiwala - ysk33
 
 ## Admin Credentials
-- Username: admin
-- Password: admins
+- Username: admin@buyme.com
+- Password: admin
+
+## Customer Representative Credentials
+
+CR 1
+- Username: maachuda@buyme.com
+- Password: 1234
+
+## User Credentials
+
+- Username: ysk33@buyme.com
+- Password: 123
 
