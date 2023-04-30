@@ -23,3 +23,7 @@
 - Dion Trevor Castellino - dc1513
 - Yash Santosh Khasgiwala - ysk33
 
+## Admin Credentials
+- Username: admin
+- Password: admins
+
