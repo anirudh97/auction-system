@@ -13,9 +13,7 @@
   - Configurations are present in `config/db.config.js`
 - Run `node index.js`
 - Goto http://localhost:3000
-- Sample User Credentials
-  - Username: abc@gmail.com
-  - Password: 1234
+
 
 ## Team Members
 - Anirudh Ramachandra Jakati - arj96
